@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+
+# Note: /js/ and /css/ are intentionally NOT disallowed — Google needs them to
+# render pages; blocking them degrades mobile-friendliness assessment.
+Disallow: /data/
+Disallow: /db/
+Disallow: /json/
+Disallow: /assets/
+Disallow: /icons/
+Disallow: /fonts/
+Disallow: /images/
+Disallow: /models/
+Disallow: /node_modules/
+Disallow: /archive/
+Disallow: /tests/
+
+Sitemap: https://solimananas.github.io/Tasbee7/sitemap.xml

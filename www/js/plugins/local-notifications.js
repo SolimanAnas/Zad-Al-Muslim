@@ -200,3 +200,4 @@ var capacitorLocalNotifications = (function (exports, core) {
 
 })({}, capacitorExports);
 //# sourceMappingURL=plugin.js.map
+

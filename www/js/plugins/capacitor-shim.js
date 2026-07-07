@@ -44,3 +44,4 @@
   console.log('[CapacitorShim] Environment:', isNative ? 'Native Android/iOS' : 'Web Browser');
   console.log('[CapacitorShim] capacitorExports ready:', !!window.capacitorExports);
 })();
+

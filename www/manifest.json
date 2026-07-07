@@ -5,8 +5,8 @@
   "description": "القرآن الكريم، الأذكار، المسبحة، وإذاعة القرآن الكريم",
   "lang": "ar",
   "dir": "rtl",
-  "start_url": "index.html",
-  "scope": "/Tasbee7/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#020617",
@@ -23,7 +23,13 @@
       "src": "icons/icon_512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "icons/icon_1024.png",
@@ -35,10 +41,16 @@
 
   "screenshots": [
     {
-      "src": "poster.png",
+      "src": "poster.webp",
       "sizes": "768x1376",
-      "type": "image/png",
+      "type": "image/webp",
       "form_factor": "narrow"
+    },
+    {
+      "src": "poster-wide.webp",
+      "sizes": "1280x800",
+      "type": "image/webp",
+      "form_factor": "wide"
     }
   ],
 

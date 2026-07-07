@@ -1,20 +1,41 @@
-// js/notifications.js — Capacitor v4.0
-// Islamic Notification System for @capacitor/local-notifications
-// Falls back to Web Notification API when running in a browser.
+// js/notifications.js - FIXED v4.1
+// Islamic Notification System — Local Mode with Push Support
+
+// Verbose logging only when the user opts in: localStorage.setItem('debug', '1').
+// warn/error always pass through.
+const dlog = (() => {
+  let on = false;
+  try { on = localStorage.getItem('debug') === '1'; } catch (e) {}
+  return on ? console.log.bind(console) : () => {};
+})();
+
+// Resolve asset paths relative to the site root.
+function _assetUrl(path) {
+  if (path.startsWith('/') || path.startsWith('http')) return path;
+  const p = window.location.pathname;
+  if (p.startsWith('/Tasbee7/')) return '/Tasbee7/' + path;
+  return './' + path;
+}
 
 const NotificationSystem = {
 
   // ========== CONFIG ==========
   config: {
-    preReminderMinutes: 10,
+    serverUrl: 'https://zad-push-server.solimananas2012.workers.dev',
+    // Offline fallback only — the authoritative key is fetched from
+    // GET /vapidPublicKey at subscribe time and validated (see getVapidKey).
+    vapidPublicKey: 'BFBoJ96GEU6t_hIBX_MaWHQRTSdChk2yA78dDNcQuNyXfiL2gFVnyRsrZW5d1kO5aEY2oCkafBQHX7kRU3tS1Y',
     quietHoursStart: 23,
     quietHoursEnd: 5,
-    scheduleDays: 7          // schedule notifications for next N days at a time
+    preReminderMinutes: 10
+  },
+
+  // ========== SUPPORT CHECK ==========
+  get isSupported() {
+    return ('Notification' in window) && ('serviceWorker' in navigator);
   },
 
   // ========== SETTINGS ==========
-  // All default to true for maximum notifications — user can opt-out
-  // quietHours defaults to false so users don't miss prayers at night
   settings: {
     enabled: true,
     prayerTimes: true,
@@ -22,19 +43,24 @@ const NotificationSystem = {
     azkarEvening: true,
     fridayKahf: true,
     preReminders: true,
-    quietHours: false,         // Changed from true - let notifications through at night
+    quietHours: true,
     autoLocation: true,
-    streakReminders: true,
+    streakReminders: true,   // FIX: was missing — caused toggle in notifications.html to break
     pushEnabled: false
   },
 
   // ========== STATE ==========
   state: {
+    userId: null,
+    subscribed: false,
+    triggers: {},
     streak: 0,
     lastActive: null,
-    triggers: {}             // used for web-mode dedup only
+    lastScheduleUpload: 0,  // last successful /subscribe upload (epoch ms)
+    lastScheduleCount: 0    // events the server holds from that upload
   },
 
+  // Default prayer times (fallback when no location available)
   defaultTimes: {
     fajr:    { hour: 5,  minute: 0,  name: 'الفجر'  },
     dhuhr:   { hour: 12, minute: 30, name: 'الظهر'  },
@@ -43,433 +69,494 @@ const NotificationSystem = {
     isha:    { hour: 20, minute: 0,  name: 'العشاء' }
   },
 
+  // FIX: DO NOT spread defaultTimes here — 'this' is undefined in object literals.
+  // prayerTimes is initialized inside init() instead.
   prayerTimes: null,
-  isNative: false,           // true when running inside Capacitor Android/iOS
-  LN: null,                  // LocalNotifications plugin handle
+  swRegistration: null,
   checkInterval: null,
 
   // ========== INIT ==========
+  // Local-first: the device computes prayer times (adhan.js) and shows
+  // notifications via the Service Worker on a schedule. This works offline and
+  // needs no server. Web-push is layered on top as a *best-effort* subscription
+  // so the server can deliver admin/broadcast messages — it never replaces the
+  // local scheduler and never fires per-event self-broadcasts.
   async init() {
-    console.log('🔔 NotificationSystem v4.0 — init');
+    dlog('🔔 Initializing Notification System v4.2 (local-first)...');
 
-    // prayerTimes can't be spread in object literal (this is undefined there)
-    if (!this.prayerTimes) this.prayerTimes = { ...this.defaultTimes };
+    // FIX: Initialize prayerTimes here where 'this' is valid
+    if (!this.prayerTimes) {
+      this.prayerTimes = { ...this.defaultTimes };
+    }
 
-    this.detectEnvironment();
+    if (!this.isSupported) {
+      console.warn('⚠️ Notifications not supported in this browser');
+      return;
+    }
+
+    this.generateUserId();
     this.loadState();
+
+    // FIX: Attach to existing SW instead of re-registering (index.html already registers)
+    await this.attachServiceWorker();
+
+    // Local scheduling is the source of truth — always compute times + run checks.
+    await this.initLocalMode();
+
+    // Best-effort push subscription (additive; for server/admin broadcasts only).
+    if (this.config.serverUrl && this.swRegistration && Notification.permission === 'granted') {
+      this.subscribeToPush().catch(err => console.warn('⚠️ Push subscribe skipped:', err.message));
+    }
+
     this.updateStreak();
+    dlog('✅ Notification System ready');
 
-    if (this.isNative && this.LN) {
-      await this.initNativeMode();
-    } else {
-      await this.initWebMode();
-    }
-    console.log('✅ NotificationSystem ready');
+    // Let UI pages (notifications.html) re-render once async init has real
+    // data — they run their first render before prayer times are computed.
+    try { window.dispatchEvent(new CustomEvent('notifications:ready')); } catch (e) {}
   },
 
-  // ========== ENVIRONMENT DETECTION ==========
-  detectEnvironment() {
-    // isNativePlatform() returns true when inside Capacitor Android/iOS
-    this.isNative = !!(
-      window.Capacitor &&
-      window.Capacitor.isNativePlatform &&
-      window.Capacitor.isNativePlatform()
-    );
-
-    // LocalNotifications plugin handle (set by @capacitor/local-notifications UMD)
-    this.LN = window.capacitorLocalNotifications
-            ? window.capacitorLocalNotifications.LocalNotifications
-            : null;
-
-    // Also try window.Capacitor.Plugins.LocalNotifications as fallback
-    if (!this.LN && window.Capacitor && window.Capacitor.Plugins) {
-      this.LN = window.Capacitor.Plugins.LocalNotifications || null;
-    }
-
-    console.log('📱 isNative:', this.isNative, '| LocalNotifications:', !!this.LN);
-  },
-
-  // ========== NATIVE (CAPACITOR) MODE ==========
-  async initNativeMode() {
-    console.log('📱 Native notification mode (LocalNotifications)');
-
-    // Request permission
+  // ========== SERVICE WORKER ==========
+  // FIX: Don't register a new SW. Reuse the existing registration from index.html.
+  async attachServiceWorker() {
+    if (!('serviceWorker' in navigator)) return;
     try {
-      const perm = await this.LN.requestPermissions();
-      if (perm.display !== 'granted') {
-        console.warn('⚠️ Notification permission denied');
-        this.settings.enabled = false;
+      // Reuse existing registration if present
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      if (registrations.length > 0) {
+        this.swRegistration = registrations[0];
+      } else {
+        // Register only if no SW exists yet (e.g., notifications.html opened directly)
+        this.swRegistration = await navigator.serviceWorker.register(
+          new URL('sw.js', window.location.href).href
+        );
+      }
+
+      // Wait for SW to be active and controlling
+      await navigator.serviceWorker.ready;
+
+      // Authoritative subscription state (clears a stale `true` if the user revoked it,
+      // which would otherwise make the local scheduler wrongly defer to the server).
+      const existingSub = await this.swRegistration.pushManager.getSubscription();
+      this.state.subscribed = !!existingSub;
+
+      dlog('✅ SW attached, scope:', this.swRegistration.scope);
+    } catch (err) {
+      console.error('❌ SW attachment failed:', err);
+      this.swRegistration = null;
+    }
+  },
+
+  // ========== PUSH SUBSCRIPTION + SERVER SCHEDULE ==========
+  // Subscribes this device and uploads a precomputed ~7-day notification schedule
+  // so the server's cron can deliver prayer/azkar notifications even when the app
+  // is fully closed. The server does no prayer-time math — it just fires what we
+  // send it at the right moment (see server/cloudflare.js dispatchDue).
+  async subscribeToPush() {
+    if (!this.swRegistration) throw new Error('no service worker');
+
+    const vapidKey = await this.getVapidKey();
+    if (!vapidKey) throw new Error('no usable VAPID key (server unreachable, bundled fallback invalid)');
+    const vapidKeyBytes = this.urlBase64ToUint8Array(vapidKey);
+
+    let subscription = await this.swRegistration.pushManager.getSubscription();
+
+    // A subscription bound to a different VAPID key is dead weight: the push
+    // service rejects everything the server signs (403). Resubscribe cleanly.
+    if (subscription && subscription.options && subscription.options.applicationServerKey) {
+      const current = new Uint8Array(subscription.options.applicationServerKey);
+      const matches = current.length === vapidKeyBytes.length &&
+        current.every((b, i) => b === vapidKeyBytes[i]);
+      if (!matches) {
+        console.warn('⚠️ Existing push subscription uses a stale VAPID key — resubscribing');
+        await subscription.unsubscribe().catch(() => {});
+        subscription = null;
+      }
+    }
+
+    if (!subscription) {
+      subscription = await this.swRegistration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: vapidKeyBytes
+      });
+    }
+
+    this.state.subscribed = true;
+    this.settings.pushEnabled = true;
+    this.saveState();
+    await this.uploadSchedule(subscription);
+  },
+
+  // Server key first (authoritative — it's the one the worker signs with),
+  // bundled key as offline fallback. Either way the key must be a valid
+  // uncompressed P-256 point (65 bytes, 0x04 prefix) or subscribe() throws.
+  async getVapidKey() {
+    try {
+      const res = await fetch(`${this.config.serverUrl}/vapidPublicKey`);
+      const data = await res.json();
+      if (data && this.isValidVapidKey(data.key)) return data.key;
+    } catch (e) { /* offline / server down — try the bundled key */ }
+    return this.isValidVapidKey(this.config.vapidPublicKey) ? this.config.vapidPublicKey : null;
+  },
+
+  isValidVapidKey(key) {
+    if (typeof key !== 'string' || !key) return false;
+    try {
+      const bytes = this.urlBase64ToUint8Array(key);
+      return bytes.length === 65 && bytes[0] === 0x04;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  // Push the current device's subscription + freshly built schedule to the server.
+  // Safe to call anytime: no-op when there's no server / SW / active subscription.
+  async uploadSchedule(subscription) {
+    if (!this.config.serverUrl || !this.swRegistration) return;
+    subscription = subscription || await this.swRegistration.pushManager.getSubscription();
+    if (!subscription) return;
+
+    const schedule = this.buildSchedule(7);
+    try {
+      const res = await fetch(`${this.config.serverUrl}/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          subscription,
+          userId: this.state.userId,
+          tzOffset: new Date().getTimezoneOffset(),
+          schedule
+        })
+      });
+      const result = await res.json().catch(() => ({}));
+      if (result.success) {
+        // Record what the server now holds — checkAndNotify only defers to the
+        // server while this is fresh and non-empty (see serverScheduleActive).
+        this.state.lastScheduleUpload = Date.now();
+        this.state.lastScheduleCount = schedule.length;
         this.saveState();
-        return;
+        // Let the SW refresh this schedule from periodicsync while the app is closed.
+        await this.persistScheduleContext();
+        await this.registerPeriodicSync();
+        dlog(`✅ Schedule uploaded to server (${schedule.length} events)`);
       }
     } catch (e) {
-      console.warn('⚠️ requestPermissions failed:', e.message);
-    }
-
-    // Create Android notification channels
-    await this.createChannels();
-
-    // Calculate prayer times then schedule
-    await this.initPrayerTimes();
-    if (this.settings.enabled) {
-      await this.scheduleAllNotifications();
+      console.warn('⚠️ Schedule upload failed:', e.message);
     }
   },
 
-  async createChannels() {
-    if (!this.LN.createChannel) return;
-    const channels = [
-      {
-        id: 'prayer',
-        name: 'أوقات الصلاة',
-        description: 'تنبيهات الأذان',
-        importance: 5,
-        vibration: true,
-        visibility: 1
-      },
-      {
-        id: 'azkar',
-        name: 'الأذكار اليومية',
-        description: 'تذكيرات أذكار الصباح والمساء',
-        importance: 4,
-        vibration: true
-      },
-      {
-        id: 'reminders',
-        name: 'تذكيرات عامة',
-        description: 'تذكيرات يومية متنوعة',
-        importance: 3
-      }
-    ];
-    for (const ch of channels) {
-      try {
-        await this.LN.createChannel(ch);
-      } catch (e) {
-        // channel may already exist — not a fatal error
-      }
-    }
-    console.log('✅ Notification channels ready');
+  // True while the server holds a usable schedule for this device: the last
+  // upload succeeded, contained events, and hasn't outlived its 7-day horizon.
+  // If this is false the local scheduler must keep firing — otherwise a failed
+  // or empty upload silences notifications entirely.
+  serverScheduleActive() {
+    const SCHEDULE_HORIZON_MS = 7 * 24 * 3600 * 1000;
+    return (this.state.lastScheduleCount || 0) > 0 &&
+           (Date.now() - (this.state.lastScheduleUpload || 0)) < SCHEDULE_HORIZON_MS;
   },
 
-  // ========== WEB (BROWSER) MODE ==========
-  async initWebMode() {
-    console.log('🌐 Web notification mode (Notification API)');
-    if (!('Notification' in window)) return;
+  // Snapshot of everything the schedule builder needs. Also persisted to the
+  // push-ctx cache so the service worker can rebuild the schedule from
+  // periodicsync while the app is closed (localStorage is page-only).
+  scheduleContext() {
+    return {
+      settings: this.settings,
+      lat: localStorage.getItem('prayer_lat'),
+      lng: localStorage.getItem('prayer_lng'),
+      calcMethod: localStorage.getItem('calcMethod') || 'UAE',
+      quietHoursStart: this.config.quietHoursStart,
+      quietHoursEnd: this.config.quietHoursEnd,
+      preReminderMinutes: this.config.preReminderMinutes,
+      serverUrl: this.config.serverUrl,
+      userId: this.state.userId
+    };
+  },
+
+  // Build absolute-time notification events for the next `days` days.
+  // Delegates to the shared builder (js/schedule-builder.js) — the same code
+  // the service worker runs on periodicsync. Returns [] if we can't compute
+  // prayers (no location / adhan.js missing) — the server then has nothing to fire.
+  buildSchedule(days = 7) {
+    if (typeof buildNotificationSchedule !== 'function') return [];
+    return buildNotificationSchedule(this.scheduleContext(), days);
+  },
+
+  // Persist the schedule context where the SW can read it (Cache API is the
+  // only storage both contexts share without IDB ceremony).
+  async persistScheduleContext() {
+    try {
+      const cache = await caches.open('push-ctx-v1');
+      await cache.put('./__push-ctx', new Response(
+        JSON.stringify(this.scheduleContext()),
+        { headers: { 'Content-Type': 'application/json' } }
+      ));
+    } catch (e) { /* cache unavailable — periodicsync refresh just won't run */ }
+  },
+
+  // Ask the browser to wake the SW ~daily so it can re-upload a fresh 7-day
+  // schedule even if the user never opens the app (closes the "pushes stop
+  // after 7 days" gap). Chromium-only; silently unsupported elsewhere.
+  async registerPeriodicSync() {
+    try {
+      if (!this.swRegistration || !('periodicSync' in this.swRegistration)) return;
+      const status = await navigator.permissions.query({ name: 'periodic-background-sync' });
+      if (status.state !== 'granted') return;
+      await this.swRegistration.periodicSync.register('refresh-push-schedule', {
+        minInterval: 24 * 60 * 60 * 1000
+      });
+      dlog('🔄 Periodic schedule refresh registered');
+    } catch (e) { /* permission API or registration unsupported — fine */ }
+  },
+
+  urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const output = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; i++) output[i] = rawData.charCodeAt(i);
+    return output;
+  },
+
+  // ========== LOCAL MODE ==========
+  async initLocalMode() {
+    dlog('📱 Local notification mode active');
+
+    // Do NOT request permission here — this runs on every page load (e.g. the
+    // home page) with no user gesture, and browsers auto-suppress /
+    // permanently embargo non-gesture prompts. showNotification() below
+    // already no-ops until permission is 'granted', so it's safe to skip the
+    // prompt entirely; call NotificationSystem.enableNotifications() from a
+    // real button click (see pages/notifications.html) to ask for it.
+
+    await this.initAutoPrayerTimes();
+    this._timesDate = new Date().toDateString(); // times are fresh for today; skip the first-tick recompute
+    this.scheduleChecks();
+  },
+
+  // Gesture-gated permission request — call this ONLY from a click/tap
+  // handler (e.g. the "enable notifications" toggle). Returns the resulting
+  // Notification.permission value.
+  async enableNotifications() {
+    if (!this.isSupported) return 'unsupported';
     if (Notification.permission === 'default') {
       await Notification.requestPermission();
     }
-    await this.initPrayerTimes();
-    // Poll every 30s to fire browser notifications
-    if (this.checkInterval) clearInterval(this.checkInterval);
-    this.checkInterval = setInterval(() => this.checkAndNotifyWeb(), 30000);
-    this.checkAndNotifyWeb();
+    if (Notification.permission === 'granted') {
+      // Mirror init()'s best-effort push subscribe now that we're allowed to.
+      if (this.config.serverUrl && this.swRegistration) {
+        this.subscribeToPush().catch(err => console.warn('⚠️ Push subscribe skipped:', err.message));
+      }
+    }
+    return Notification.permission;
   },
 
-  // ========== PRAYER TIME CALCULATION ==========
-  async initPrayerTimes() {
-    // Try main app coords first, then qibla coords
-    let lat = parseFloat(localStorage.getItem('prayer_lat'));
-    let lng = parseFloat(localStorage.getItem('prayer_lng'));
+  // ========== PRAYER TIMES ==========
+  async initAutoPrayerTimes() {
+    // FIX: First try lat/lng already stored by index.html (prayer_lat, prayer_lng)
+    const storedLat = localStorage.getItem('prayer_lat');
+    const storedLng = localStorage.getItem('prayer_lng');
 
-    // Fallback to qibla location if main coords missing
-    if (isNaN(lat) || isNaN(lng) || lat === 0) {
-      lat = parseFloat(localStorage.getItem('last_lat'));
-      lng = parseFloat(localStorage.getItem('last_lng'));
-    }
-
-    if (lat && lng) {
-      this.calcWithAdhan(lat, lng);
+    if (storedLat && storedLng) {
+      await this.fetchPrayerTimesByCoords(parseFloat(storedLat), parseFloat(storedLng));
       return;
     }
 
-    // Try to get location if autoLocation is on
-    if (this.settings.autoLocation) {
-      await this.detectAndSaveLocation();
-    }
-
-    // Load from cache if adhan calc didn't produce fresh times
-    if (!this.prayerTimes._fresh) {
-      const cached = localStorage.getItem('prayerTimes');
-      if (cached) {
-        try { this.prayerTimes = { ...this.defaultTimes, ...JSON.parse(cached) }; } catch (e) {}
+    // Try geolocation if autoLocation is enabled
+    if (this.settings.autoLocation && navigator.geolocation) {
+      try {
+        const pos = await new Promise((resolve, reject) =>
+          navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 6000 })
+        );
+        // Round to ~1 km: plenty for prayer times, much less of a fingerprint
+        const lat = +pos.coords.latitude.toFixed(2);
+        const lon = +pos.coords.longitude.toFixed(2);
+        localStorage.setItem('prayer_lat', lat);
+        localStorage.setItem('prayer_lng', lon);
+        await this.fetchPrayerTimesByCoords(lat, lon);
+        return;
+      } catch (e) {
+        console.warn('⚠️ Geolocation failed:', e.message);
       }
     }
+
+    // Final fallback: cached city, or Cairo/Egypt
+    const city = localStorage.getItem('userCity') || 'Cairo';
+    const country = localStorage.getItem('userCountry') || 'Egypt';
+    await this.fetchPrayerTimesByCity(city, country);
   },
 
-  // Use adhan.js (loaded globally in the page) for precise prayer time calculation
-  calcWithAdhan(lat, lng, forDate) {
-    if (!window.adhan) { console.warn('⚠️ adhan.js not loaded'); return false; }
+  // Use adhan.js library (same as index.html) for consistent prayer times
+  // Single source of truth for the calculation method: js/prayer-service.js
+  // (madhab already set there).
+  getAdhanMethod() {
+    if (typeof adhan === 'undefined' || typeof PrayerService === 'undefined') return null;
+    return PrayerService.method();
+  },
+
+  async fetchPrayerTimesByCoords(lat, lng) {
     try {
-      const date   = forDate || new Date();
+      const calcMethod = this.getAdhanMethod();
+      if (!calcMethod) throw new Error('adhan.js not loaded');
+      calcMethod.madhab = adhan.Madhab.Shafi;
       const coords = new adhan.Coordinates(lat, lng);
-      const params = this.adhanParams();
-      const pt     = new adhan.PrayerTimes(coords, date, params);
-
-      const snap = {
-        fajr:    { hour: pt.fajr.getHours(),    minute: pt.fajr.getMinutes(),    name: 'الفجر'  },
-        dhuhr:   { hour: pt.dhuhr.getHours(),   minute: pt.dhuhr.getMinutes(),   name: 'الظهر'  },
-        asr:     { hour: pt.asr.getHours(),     minute: pt.asr.getMinutes(),     name: 'العصر'  },
-        maghrib: { hour: pt.maghrib.getHours(), minute: pt.maghrib.getMinutes(), name: 'المغرب' },
-        isha:    { hour: pt.isha.getHours(),     minute: pt.isha.getMinutes(),    name: 'العشاء' },
-        _fresh:  true
-      };
-
-      if (!forDate) {
-        this.prayerTimes = snap;
-        localStorage.setItem('prayerTimes', JSON.stringify(snap));
+      const now = new Date();
+      const pt = new adhan.PrayerTimes(coords, now, calcMethod);
+      this.parseAdhanTimes(pt);
+      dlog('✅ Prayer times calculated via adhan.js (coords)');
+    } catch (err) {
+      console.warn('⚠️ fetchPrayerTimesByCoords failed:', err.message);
+      const saved = localStorage.getItem('prayerTimes');
+      if (saved) {
+        try { this.prayerTimes = { ...this.defaultTimes, ...JSON.parse(saved) }; } catch (e) {}
       }
-      return snap;
-    } catch (e) {
-      console.error('❌ adhan.js error:', e);
-      return null;
     }
   },
 
-  adhanParams() {
-    const map = { MWL: 'MuslimWorldLeague', UmmAlQura: 'UmmAlQura', Egypt: 'Egyptian', Karachi: 'Karachi' };
-    const method = map[localStorage.getItem('calcMethod') || 'MWL'] || 'MuslimWorldLeague';
-    const params = adhan.CalculationMethod[method]();
-    params.madhab = adhan.Madhab.Shafi;
-    return params;
-  },
-
-  async detectAndSaveLocation() {
-    // Use standard navigator.geolocation (works in Capacitor WebView too)
-    if (!navigator.geolocation) return;
+  async fetchPrayerTimesByCity(city, country) {
     try {
-      const pos = await new Promise((resolve, reject) =>
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true, timeout: 8000
-        })
-      );
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
-      localStorage.setItem('prayer_lat', lat);
-      localStorage.setItem('prayer_lng', lng);
-      this.calcWithAdhan(lat, lng);
-    } catch (e) {
-      console.warn('⚠️ Geolocation failed:', e.message);
+      const calcMethod = this.getAdhanMethod();
+      if (!calcMethod) throw new Error('adhan.js not loaded');
+      calcMethod.madhab = adhan.Madhab.Shafi;
+      // Look the city up in the bundled cities database when available;
+      // otherwise fall back to Cairo (matches the declared default city).
+      const known = (typeof cityCoordinatesMap !== 'undefined' && cityCoordinatesMap[city]) || null;
+      const coords = known
+        ? new adhan.Coordinates(known.lat, known.lng)
+        : new adhan.Coordinates(30.0444, 31.2357);
+      const now = new Date();
+      const pt = new adhan.PrayerTimes(coords, now, calcMethod);
+      this.parseAdhanTimes(pt);
+      dlog(`✅ Prayer times calculated via adhan.js (${known ? 'city: ' + city : 'Cairo fallback'})`);
+    } catch (err) {
+      console.warn('⚠️ fetchPrayerTimesByCity failed:', err.message);
     }
   },
 
-  // ========== SCHEDULE ALL NATIVE NOTIFICATIONS ==========
-  async scheduleAllNotifications() {
-    if (!this.settings.enabled || !this.LN) return;
+  async fetchPrayerTimes(city, country) {
+    await this.fetchPrayerTimesByCity(city, country);
+  },
 
-    await this.cancelAllNotifications();
+  parseAdhanTimes(pt) {
+    this.prayerTimes = {
+      fajr:    { hour: pt.fajr.getHours(),    minute: pt.fajr.getMinutes(),    name: 'الفجر' },
+      dhuhr:   { hour: pt.dhuhr.getHours(),   minute: pt.dhuhr.getMinutes(),   name: 'الظهر' },
+      asr:     { hour: pt.asr.getHours(),     minute: pt.asr.getMinutes(),     name: 'العصر' },
+      maghrib: { hour: pt.maghrib.getHours(), minute: pt.maghrib.getMinutes(), name: 'المغرب' },
+      isha:    { hour: pt.isha.getHours(),    minute: pt.isha.getMinutes(),    name: 'العشاء' }
+    };
+    localStorage.setItem('prayerTimes', JSON.stringify(this.prayerTimes));
+  },
 
-    let lat = parseFloat(localStorage.getItem('prayer_lat'));
-    let lng = parseFloat(localStorage.getItem('prayer_lng'));
-    // Fallback to qibla location if main coords missing
-    if (isNaN(lat) || isNaN(lng) || lat === 0) {
-      lat = parseFloat(localStorage.getItem('last_lat'));
-      lng = parseFloat(localStorage.getItem('last_lng'));
+  // ========== STATE ==========
+  // Settings schema version — bumped to auto-fix corrupted localStorage from older buggy versions
+  SETTINGS_VERSION: 2,
+
+  generateUserId() {
+    let id = localStorage.getItem('notificationUserId');
+    if (!id) {
+      id = 'user_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+      localStorage.setItem('notificationUserId', id);
     }
-    const hasCoords = !isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0;
-    const notifications = [];
-    const now = new Date();
+    this.state.userId = id;
+  },
 
-    for (let day = 0; day < this.config.scheduleDays; day++) {
-      const date = new Date(now);
-      date.setDate(date.getDate() + day);
-      date.setHours(0, 0, 0, 0);
-
-      // Calculate prayer times for this day
-      let dayTimes;
-      if (hasCoords && window.adhan) {
-        dayTimes = this.calcWithAdhan(lat, lng, date);
-      }
-      dayTimes = dayTimes || this.prayerTimes;
-
-      // ── Prayer time notifications ──────────────────────────────
-      if (this.settings.prayerTimes) {
-        const prayerOrder = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
-        for (const key of prayerOrder) {
-          const prayer = dayTimes[key];
-          if (!prayer) continue;
-
-          const prayerAt = new Date(date);
-          prayerAt.setHours(prayer.hour, prayer.minute, 0, 0);
-          if (prayerAt <= now) continue;   // skip past times
-
-          // Skip quiet hours for non-Fajr prayers (Fajr at dawn is intentional)
-          if (key !== 'fajr' && this.isDuringQuietHours(prayerAt)) continue;
-
-          notifications.push({
-            id: this.notifId('prayer', key, day),
-            title: `🕌 حان وقت ${prayer.name}`,
-            body: `الآن وقت صلاة ${prayer.name} — حي على الصلاة`,
-            schedule: { at: prayerAt, allowWhileIdle: true },
-            channelId: 'prayer',
-            smallIcon: 'ic_stat_icon_config_sample',
-            iconColor: '#10B981',
-            extra: { type: 'prayer', prayer: key }
-          });
-
-          // Pre-prayer reminder (10 min before)
-          if (this.settings.preReminders) {
-            const preAt = new Date(prayerAt.getTime() - this.config.preReminderMinutes * 60000);
-            if (preAt > now) {
-              notifications.push({
-                id: this.notifId('pre', key, day),
-                title: `⏰ تذكير: ${prayer.name}`,
-                body: `باقي ${this.config.preReminderMinutes} دقائق على أذان ${prayer.name}`,
-                schedule: { at: preAt, allowWhileIdle: true },
-                channelId: 'prayer',
-                smallIcon: 'ic_stat_icon_config_sample',
-                iconColor: '#10B981',
-                extra: { type: 'prayer_pre', prayer: key }
-              });
-            }
-          }
+  loadState() {
+    try {
+      const savedSettings = localStorage.getItem('notificationSettings');
+      if (savedSettings) {
+        const parsed = JSON.parse(savedSettings);
+        // Version 1 (no _version field) may have corrupted enabled=false
+        // Reset to true so scheduled notifications work again
+        if (!parsed._version) {
+          parsed.enabled = true;
+          parsed._version = this.SETTINGS_VERSION;
         }
+        this.settings = { ...this.settings, ...parsed };
       }
 
-      // ── Morning azkar (6:30 AM) ────────────────────────────────
-      if (this.settings.azkarMorning) {
-        const at = new Date(date); at.setHours(6, 30, 0, 0);
-        if (at > now) {
-          notifications.push({
-            id: this.notifId('azkar', 'morning', day),
-            title: '🌅 أذكار الصباح',
-            body: 'اللهم بك أصبحنا — ابدأ يومك بالأذكار',
-            schedule: { at, allowWhileIdle: true },
-            channelId: 'azkar',
-            smallIcon: 'ic_stat_icon_config_sample',
-            iconColor: '#10B981',
-            extra: { type: 'azkar_morning', url: 'azkar.html?type=morning' }
-          });
-        }
+      const savedTimes = localStorage.getItem('prayerTimes');
+      if (savedTimes) {
+        this.prayerTimes = { ...this.defaultTimes, ...JSON.parse(savedTimes) };
       }
 
-      // ── Evening azkar (4:30 PM) ────────────────────────────────
-      if (this.settings.azkarEvening) {
-        const at = new Date(date); at.setHours(16, 30, 0, 0);
-        if (at > now) {
-          notifications.push({
-            id: this.notifId('azkar', 'evening', day),
-            title: '🌙 أذكار المساء',
-            body: 'اللهم بك أمسينا — اختتم يومك بالأذكار',
-            schedule: { at, allowWhileIdle: true },
-            channelId: 'azkar',
-            smallIcon: 'ic_stat_icon_config_sample',
-            iconColor: '#10B981',
-            extra: { type: 'azkar_evening', url: 'azkar.html?type=night' }
-          });
-        }
+      const savedState = localStorage.getItem('notificationState');
+      if (savedState) {
+        this.state = { ...this.state, ...JSON.parse(savedState) };
       }
+    } catch (e) {
+      console.warn('⚠️ Failed to load state, starting fresh:', e);
+    }
+  },
 
-      // ── Friday Kahf reminder (9:00 AM on Fridays) ─────────────
-      if (this.settings.fridayKahf && date.getDay() === 5) {
-        const at = new Date(date); at.setHours(9, 0, 0, 0);
-        if (at > now) {
-          notifications.push({
-            id: this.notifId('friday', 'kahf', day),
-            title: '🕋 يوم الجمعة المبارك',
-            body: 'لا تنسَ قراءة سورة الكهف اليوم',
-            schedule: { at, allowWhileIdle: true },
-            channelId: 'reminders',
-            smallIcon: 'ic_stat_icon_config_sample',
-            iconColor: '#10B981',
-            extra: { type: 'friday_kahf', url: 'quran.html?surah=18' }
-          });
-        }
-      }
+  saveState() {
+    const settingsToSave = { ...this.settings, _version: this.SETTINGS_VERSION };
+    localStorage.setItem('notificationSettings', JSON.stringify(settingsToSave));
+    localStorage.setItem('notificationState', JSON.stringify(this.state));
+  },
 
-      // ── Daily streak reminder (9:00 PM) ───────────────────────
-      if (this.settings.streakReminders) {
-        const at = new Date(date); at.setHours(21, 0, 0, 0);
-        if (at > now) {
-          notifications.push({
-            id: this.notifId('streak', 'day', day),
-            title: '🔥 حافظ على استمراريتك!',
-            body: `لديك ${this.state.streak} يوم متتالي — افتح التطبيق الآن`,
-            schedule: { at, allowWhileIdle: true },
-            channelId: 'reminders',
-            smallIcon: 'ic_stat_icon_config_sample',
-            iconColor: '#10B981',
-            extra: { type: 'streak', url: 'index.html' }
-          });
-        }
-      }
+  // ========== SHOW NOTIFICATION ==========
+  async showNotification(title, options = {}) {
+    this._lastError = null;
+
+    if (options.forceEnable) {
+      if (Notification.permission !== 'granted') { dlog('🔕 Notification permission not granted'); this._lastError = 'permission_denied'; return false; }
+    } else {
+      if (!this.settings.enabled) { dlog('🔇 Notifications disabled in settings'); this._lastError = 'settings_disabled'; return false; }
+      if (this.isQuietHours() && !options.forceQuiet) { dlog('🌙 Quiet hours active, notification blocked'); this._lastError = 'quiet_hours'; return false; }
+      if (Notification.permission !== 'granted') { dlog('🔕 Notification permission not granted'); this._lastError = 'permission_denied'; return false; }
     }
 
-    if (notifications.length === 0) {
-      console.log('ℹ️ No notifications to schedule (all past or disabled)');
-      return;
-    }
+    // Only use fields supported by both SW showNotification and Notification constructor
+    const notifOptions = {
+      body: options.body || '',
+      icon: options.icon || _assetUrl('icons/icon-192.png'),
+      tag: options.tag || 'zad-muslim',
+      data: options.data || { url: _assetUrl('index.html') },
+      vibrate: options.vibrate || [200, 100, 200],
+    };
+
+    let swError = null;
 
     try {
-      await this.LN.schedule({ notifications });
-      console.log(`✅ Scheduled ${notifications.length} notifications for next ${this.config.scheduleDays} days`);
-    } catch (e) {
-      console.error('❌ schedule() failed:', e);
-    }
-  },
+      const reg = this.swRegistration || await navigator.serviceWorker.ready;
+      if (!reg) throw new Error('لا يوجد Service Worker مسجل');
+      this.swRegistration = reg;
 
-  // Unique integer ID per notification slot (Capacitor requires integer IDs)
-  notifId(type, key, day) {
-    const typeCode = { prayer: 1, pre: 2, azkar: 3, friday: 4, streak: 5 }[type] || 9;
-    const keyCode  = { fajr: 0, dhuhr: 1, asr: 2, maghrib: 3, isha: 4,
-                       morning: 5, evening: 6, kahf: 7, day: 8 }[key] || 9;
-    return day * 100 + typeCode * 10 + keyCode;   // max = 6*100+9*10+9 = 699
-  },
-
-  async cancelAllNotifications() {
-    if (!this.LN) return;
-    try {
-      const { notifications } = await this.LN.getPending();
-      if (notifications && notifications.length > 0) {
-        await this.LN.cancel({ notifications });
-        console.log(`🗑️ Cancelled ${notifications.length} pending notifications`);
+      // Wait for an active, activated worker. `navigator.serviceWorker.ready`
+      // guarantees this eventually, but there can be a brief race where the
+      // registration exists with no active worker yet. Retry a few times
+      // before giving up.
+      for (let attempt = 0; attempt < 30; attempt++) {
+        if (reg.active && reg.active.state === 'activated') break;
+        await new Promise(r => setTimeout(r, 100));
       }
-    } catch (e) {
-      console.warn('⚠️ cancelAllNotifications failed:', e.message);
-    }
-  },
 
-  // ========== WEB MODE — POLLING FALLBACK ==========
-  checkAndNotifyWeb() {
-    if (!this.settings.enabled) return;
-    if (Notification.permission !== 'granted') return;
+      if (reg.active) {
+        await reg.showNotification(title, notifOptions);
+        dlog('🔔 Notification sent via SW:', title);
+        return true;
+      }
+      throw new Error('لا يوجد Service Worker نشط');
+    } catch (err) {
+      swError = err.message;
+      console.warn('⚠️ SW notification failed:', err.message);
 
-    const now  = new Date();
-    const h    = now.getHours();
-    const cur  = h * 60 + now.getMinutes();
-
-    // Prayer times
-    if (this.settings.prayerTimes && this.prayerTimes) {
-      for (const [key, prayer] of Object.entries(this.prayerTimes)) {
-        if (key === '_fresh') continue;
-        const pm = prayer.hour * 60 + prayer.minute;
-        if (this.settings.preReminders && cur === pm - this.config.preReminderMinutes && this.shouldTrigger(`pre-${key}`)) {
-          this.webNotify(`⏰ تذكير: ${prayer.name}`, `باقي ${this.config.preReminderMinutes} دقائق على أذان ${prayer.name}`);
-          this.markTriggered(`pre-${key}`);
-        }
-        if (cur === pm && this.shouldTrigger(key)) {
-          this.webNotify(`🕌 حان وقت ${prayer.name}`, `الآن وقت صلاة ${prayer.name}`);
-          this.markTriggered(key);
-        }
+      // Fallback: use the Notification constructor with only the subset of
+      // properties it actually supports.  Properties like badge, renotify,
+      // actions, and vibrate are SW-only — passing them to new Notification()
+      // throws "Illegal constructor" in some browser contexts.
+      try {
+        const safeOptions = { body: notifOptions.body, icon: notifOptions.icon };
+        const n = new Notification(title, safeOptions);
+        dlog('🔔 Notification sent via Notification API:', title);
+        setTimeout(() => n.close(), 5000);
+        return true;
+      } catch (e2) {
+        console.error('❌ All notification methods failed:', e2);
+        this._lastError = swError;
+        return false;
       }
     }
-    if (this.settings.azkarMorning && h >= 4 && h < 8 && this.shouldTrigger('azkar-morning')) {
-      this.webNotify('🌅 أذكار الصباح', 'ابدأ يومك بالأذكار');
-      this.markTriggered('azkar-morning');
-    }
-    if (this.settings.azkarEvening && h >= 15 && h < 18 && this.shouldTrigger('azkar-evening')) {
-      this.webNotify('🌙 أذكار المساء', 'اختتم يومك بالأذكار');
-      this.markTriggered('azkar-evening');
-    }
-    if (this.settings.fridayKahf && now.getDay() === 5 && h >= 6 && h < 10 && this.shouldTrigger('friday-kahf')) {
-      this.webNotify('🕋 يوم الجمعة المبارك', 'اقرأ سورة الكهف اليوم');
-      this.markTriggered('friday-kahf');
-    }
-  },
-
-  webNotify(title, body) {
-    if (this.isQuietHours()) return;
-    try { new Notification(title, { body, icon: './icons/icon-192.png', tag: 'zad-muslim' }); }
-    catch (e) { console.warn('webNotify failed:', e); }
   },
 
   // ========== QUIET HOURS ==========
@@ -479,173 +566,239 @@ const NotificationSystem = {
     return h >= this.config.quietHoursStart || h < this.config.quietHoursEnd;
   },
 
-  isDuringQuietHours(date) {
-    if (!this.settings.quietHours) return false;
-    const h = date.getHours();
-    return h >= this.config.quietHoursStart || h < this.config.quietHoursEnd;
+  // ========== CONTEXT HELPERS ==========
+  getContext() {
+    const now = new Date();
+    const h = now.getHours();
+    return {
+      isFriday:  now.getDay() === 5,
+      isRamadan: now.getMonth() === 3 || now.getMonth() === 4,
+      isMorning: h >= 4 && h < 8,
+      isEvening: h >= 15 && h < 18
+    };
   },
 
-  // ========== TRIGGER DEDUP (web mode only) ==========
+  // ========== TRIGGER ENGINE ==========
   shouldTrigger(key) {
     return this.state.triggers[key] !== new Date().toDateString();
   },
+
   markTriggered(key) {
     this.state.triggers[key] = new Date().toDateString();
     this.saveState();
   },
 
-  // ========== STATE ==========
-  loadState() {
-    try {
-      const s = localStorage.getItem('notificationSettings');
-      if (s) {
-        this.settings = { ...this.settings, ...JSON.parse(s) };
-      } else {
-        // First time user - save defaults
-        this.saveState();
-      }
+  // ========== SCHEDULING ==========
+  // How many minutes after a scheduled moment we'll still fire it. The check
+  // runs every 30s, so a small grace window absorbs ticks that land slightly
+  // late or brief device sleeps — without re-firing prayers from earlier today.
+  GRACE_MINUTES: 2,
 
-      const t = localStorage.getItem('prayerTimes');
-      if (t) this.prayerTimes = { ...this.defaultTimes, ...JSON.parse(t) };
+  scheduleChecks() {
+    if (this.checkInterval) clearInterval(this.checkInterval);
+    this.checkInterval = setInterval(() => this.checkAndNotify(), 30000); // every 30s
+    this.checkAndNotify(); // run immediately on init
+  },
 
-      const st = localStorage.getItem('notificationState');
-      if (st) this.state = { ...this.state, ...JSON.parse(st) };
-    } catch (e) {
-      console.warn('⚠️ State load failed:', e);
+  // True when `currentTime` is within [start, start + GRACE] minutes.
+  _withinWindow(currentTime, start) {
+    return currentTime >= start && currentTime <= start + this.GRACE_MINUTES;
+  },
+
+  async checkAndNotify() {
+    if (!this.settings.enabled) return;
+
+    const now = new Date();
+    const today = now.toDateString();
+
+    // Recompute prayer times when the day rolls over (e.g. app left open overnight).
+    if (this._timesDate !== today) {
+      this._timesDate = today;
+      await this.refreshPrayerTimes();
+    }
+
+    const currentTime = now.getHours() * 60 + now.getMinutes();
+    const ctx = this.getContext();
+
+    // When subscribed to push AND the server actually holds a fresh schedule,
+    // the server's cron owns prayer/azkar/Kahf delivery (it works in the
+    // background too) — skip them locally to avoid duplicates. If the upload
+    // failed or expired, local delivery takes over. Streak reminders always
+    // stay local: the server can't know today's activity.
+    const pushActive = this.state.subscribed && this.settings.pushEnabled && this.serverScheduleActive();
+
+    // Prayer time notifications
+    if (!pushActive && this.settings.prayerTimes) {
+      this.checkPrayerTimes(currentTime);
+    }
+
+    // Morning azkar reminder (4–8 AM)
+    if (!pushActive && this.settings.azkarMorning && ctx.isMorning && this.shouldTrigger('azkar-morning')) {
+      this.showNotification('🌅 أذكار الصباح', {
+        body: 'اللهم بك أصبحنا — ابدأ يومك بالأذكار',
+        tag: 'azkar-morning',
+        data: { url: _assetUrl('azkar.html?type=morning'), type: 'azkar' }
+      });
+      this.markTriggered('azkar-morning');
+    }
+
+    // Evening azkar reminder (3–6 PM)
+    if (!pushActive && this.settings.azkarEvening && ctx.isEvening && this.shouldTrigger('azkar-evening')) {
+      this.showNotification('🌙 أذكار المساء', {
+        body: 'اللهم بك أمسينا — اختتم يومك بالأذكار',
+        tag: 'azkar-evening',
+        data: { url: _assetUrl('azkar.html?type=night'), type: 'azkar' }
+      });
+      this.markTriggered('azkar-evening');
+    }
+
+    // Friday Kahf reminder (6–10 AM on Friday)
+    if (!pushActive && this.settings.fridayKahf && ctx.isFriday &&
+        now.getHours() >= 6 && now.getHours() < 10 &&
+        this.shouldTrigger('friday-kahf')) {
+      this.showNotification('🕋 يوم الجمعة المبارك', {
+        body: 'لا تنسَ قراءة سورة الكهف اليوم',
+        tag: 'friday-kahf',
+        data: { url: _assetUrl('quran.html?surah=18'), type: 'kahf' }
+      });
+      this.markTriggered('friday-kahf');
+    }
+
+    // Streak reminder (after 8 PM if not active today)
+    if (this.settings.streakReminders &&
+        now.getHours() >= 20 &&
+        this.state.lastActive !== today &&
+        this.shouldTrigger('streak-reminder')) {
+      this.showNotification('🔥 حافظ على استمراريتك!', {
+        body: `لديك ${this.state.streak} يوم متتالي — لا تكسر السلسلة`,
+        tag: 'streak-reminder',
+        data: { url: _assetUrl('index.html'), type: 'default' }
+      });
+      this.markTriggered('streak-reminder');
     }
   },
 
-  saveState() {
-    localStorage.setItem('notificationSettings', JSON.stringify(this.settings));
-    localStorage.setItem('notificationState',    JSON.stringify(this.state));
+  checkPrayerTimes(currentTime) {
+    if (!this.prayerTimes) return;
+    for (const [key, prayer] of Object.entries(this.prayerTimes)) {
+      const prayerMin = prayer.hour * 60 + prayer.minute;
+
+      // Pre-prayer reminder
+      if (this.settings.preReminders &&
+          this._withinWindow(currentTime, prayerMin - this.config.preReminderMinutes) &&
+          this.shouldTrigger(`pre-${key}`)) {
+        this.showNotification(`⏰ تذكير: ${prayer.name}`, {
+          body: `باقي ${this.config.preReminderMinutes} دقائق على أذان ${prayer.name}`,
+          tag: `pre-${key}`,
+          data: { url: _assetUrl('index.html'), type: 'prayer' }
+        });
+        this.markTriggered(`pre-${key}`);
+      }
+
+      // Prayer time notification — bypasses quiet hours so the adhan (incl. Fajr) is never silenced
+      if (this._withinWindow(currentTime, prayerMin) && this.shouldTrigger(key)) {
+        this.showNotification(`🕌 حان وقت ${prayer.name}`, {
+          body: `الآن وقت صلاة ${prayer.name} — حي على الصلاة`,
+          tag: `prayer-${key}`,
+          forceQuiet: true,
+          data: { url: _assetUrl('index.html'), type: 'prayer' }
+        });
+        this.markTriggered(key);
+      }
+    }
   },
 
+  // ========== STREAK ==========
   updateStreak() {
     const today = new Date().toDateString();
     if (this.state.lastActive === today) return;
-    const yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-    this.state.streak = (this.state.lastActive === yesterday.toDateString())
-      ? (this.state.streak || 0) + 1
-      : (this.state.lastActive ? 1 : this.state.streak || 1);
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+
+    if (this.state.lastActive === yesterday.toDateString()) {
+      this.state.streak = (this.state.streak || 0) + 1;
+    } else {
+      this.state.streak = this.state.lastActive ? 1 : (this.state.streak || 1);
+    }
+
     this.state.lastActive = today;
     this.saveState();
   },
 
   // ========== PUBLIC API ==========
   toggleSetting(key, value) {
-    if (!(key in this.settings)) return;
-    this.settings[key] = value;
-    this.saveState();
-    // Reschedule native notifications whenever a setting changes
-    if (this.isNative && this.LN) {
-      this.scheduleAllNotifications().catch(console.error);
+    if (key in this.settings) {
+      this.settings[key] = value;
+      this.saveState();
+      dlog(`🔧 Setting '${key}' → ${value}`);
+      // Settings change what should be pushed — refresh the server's schedule.
+      this.uploadSchedule();
     }
   },
 
+  // FIX: Prefer prayer_lat/prayer_lng (index.html coords) over city names
   async refreshPrayerTimes() {
-    let lat = parseFloat(localStorage.getItem('prayer_lat'));
-    let lng = parseFloat(localStorage.getItem('prayer_lng'));
-    // Fallback to qibla location
-    if (isNaN(lat) || isNaN(lng) || lat === 0) {
-      lat = parseFloat(localStorage.getItem('last_lat'));
-      lng = parseFloat(localStorage.getItem('last_lng'));
-    }
-    if (!isNaN(lat) && !isNaN(lng) && lat !== 0) {
-      this.calcWithAdhan(lat, lng);
-    } else {
-      await this.detectAndSaveLocation();
-    }
-    if (this.isNative && this.LN) {
-      await this.scheduleAllNotifications();
-    }
-  },
+    const lat = localStorage.getItem('prayer_lat');
+    const lng = localStorage.getItem('prayer_lng');
 
-  // showNotification: fire one immediate notification (test / manual trigger)
-  async showNotification(title, options = {}) {
-    if (!this.settings.enabled) return;
-    if (this.isQuietHours() && !options.forceQuiet) return;
-
-    if (this.isNative && this.LN) {
-      try {
-        await this.LN.schedule({
-          notifications: [{
-            id: Math.floor(Math.random() * 9000) + 1000,
-            title,
-            body: options.body || '',
-            schedule: { at: new Date(Date.now() + 500), allowWhileIdle: true },
-            channelId: options.channelId || 'reminders',
-            smallIcon: 'ic_stat_icon_config_sample',
-            iconColor: '#10B981',
-            extra: options.data || {}
-          }]
-        });
-      } catch (e) { console.error('showNotification (native) failed:', e); }
+    if (lat && lng) {
+      await this.fetchPrayerTimesByCoords(parseFloat(lat), parseFloat(lng));
     } else {
-      this.webNotify(title, options.body || '');
+      const city = localStorage.getItem('userCity') || 'Cairo';
+      const country = localStorage.getItem('userCountry') || 'Egypt';
+      await this.fetchPrayerTimesByCity(city, country);
     }
+    // New times/location → re-upload the schedule so background push stays accurate.
+    this.uploadSchedule();
   },
 
   // ========== DEBUG ==========
   async checkStatus() {
     const status = {
-      isNative:      this.isNative,
-      LN_available:  !!this.LN,
-      settings:      this.settings,
-      streak:        this.state.streak,
-      prayer_lat:    localStorage.getItem('prayer_lat'),
-      prayer_lng:    localStorage.getItem('prayer_lng'),
-      prayerTimes:   this.prayerTimes
+      supported:    this.isSupported,
+      permission:   Notification.permission,
+      swRegistered: !!this.swRegistration,
+      subscribed:   this.state.subscribed,
+      pushEnabled:  this.settings.pushEnabled,
+      prayerTimes:  this.prayerTimes,
+      settings:     this.settings,
+      streak:       this.state.streak,
+      coords:       {
+        lat: localStorage.getItem('prayer_lat'),
+        lng: localStorage.getItem('prayer_lng')
+      }
     };
-    if (this.LN) {
-      try {
-        const perm    = await this.LN.checkPermissions();
-        const pending = await this.LN.getPending();
-        status.permission    = perm.display;
-        status.pendingCount  = pending.notifications ? pending.notifications.length : 0;
-      } catch (e) {}
-    }
     console.table(status);
     return status;
   },
 
+  // Local test only — never hits the server's broadcast endpoint (which would
+  // notify every subscribed device, not just this one).
   testPush() {
     return this.showNotification('🧪 اختبار الإشعارات', {
       body: 'نظام الإشعارات يعمل بكفاءة! ✅',
+      tag: 'test',
+      forceEnable: true,
       forceQuiet: true,
-      data: { type: 'test' }
+      data: { url: _assetUrl('index.html'), type: 'test' }
     });
   }
 };
 
-// ========== BOOT ==========
-// Capacitor fires 'deviceready' via cordova compat layer.
-// We listen for it; if it fires we know native plugins are ready.
-// Also init on DOMContentLoaded so it works in browser too.
-
-let _initiated = false;
-function _bootNotifications() {
-  if (_initiated) return;
-  _initiated = true;
-  NotificationSystem.init().catch(e => console.error('NotificationSystem init error:', e));
-}
-
-document.addEventListener('deviceready', _bootNotifications, false);
-
+// ========== AUTO INIT ==========
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', function () {
-    // Small delay so native-bridge + plugin UMDs are fully initialised
-    setTimeout(_bootNotifications, 300);
-  });
+  document.addEventListener('DOMContentLoaded', () => NotificationSystem.init());
 } else {
-  setTimeout(_bootNotifications, 300);
+  NotificationSystem.init();
 }
 
-// ========== DEV CONSOLE ==========
+// ========== DEBUG CONSOLE API ==========
 window.NotificationDebug = {
   status:   () => NotificationSystem.checkStatus(),
   test:     () => NotificationSystem.testPush(),
   times:    () => NotificationSystem.prayerTimes,
   settings: () => NotificationSystem.settings,
-  state:    () => NotificationSystem.state,
-  schedule: () => NotificationSystem.scheduleAllNotifications()
+  state:    () => NotificationSystem.state
 };
+

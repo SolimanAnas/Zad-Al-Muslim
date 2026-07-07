@@ -3,304 +3,813 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#0f172a">
-<title>باحث الأحاديث | زاد المسلم</title>
+<meta name="theme-color" content="#04100c" id="metaThemeColor">
+<title>Ã˜Â¨Ã˜Â§Ã˜Â­Ã˜Â« Ã˜Â§Ã™â€žÃ˜Â£Ã˜Â­Ã˜Â§Ã˜Â¯Ã™Å Ã˜Â« Ã¢â‚¬â€ Ã˜Â²Ã˜Â§Ã˜Â¯ Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â³Ã™â€žÃ™â€¦ | Hadith Search</title>
+<meta name="description" content="Ã˜Â§Ã˜Â¨Ã˜Â­Ã˜Â« Ã™ÂÃ™Å  Ã˜Â£Ã™Æ’Ã˜Â«Ã˜Â± Ã™â€¦Ã™â€  12 Ã™â€¦Ã˜Â¬Ã™â€¦Ã™Ë†Ã˜Â¹Ã˜Â© Ã˜Â­Ã˜Â¯Ã™Å Ã˜Â«Ã™Å Ã˜Â©: Ã˜ÂµÃ˜Â­Ã™Å Ã˜Â­ Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â®Ã˜Â§Ã˜Â±Ã™Å Ã˜Å’ Ã˜ÂµÃ˜Â­Ã™Å Ã˜Â­ Ã™â€¦Ã˜Â³Ã™â€žÃ™â€¦Ã˜Å’ Ã˜Â³Ã™â€ Ã™â€  Ã˜Â£Ã˜Â¨Ã™Å  Ã˜Â¯Ã˜Â§Ã™Ë†Ã˜Â¯Ã˜Å’ Ã˜Â§Ã™â€žÃ˜Â¬Ã˜Â§Ã™â€¦Ã˜Â¹ Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â±Ã™â€¦Ã˜Â°Ã™Å Ã˜Å’ Ã˜Â³Ã™â€ Ã™â€  Ã˜Â§Ã™â€žÃ™â€ Ã˜Â³Ã˜Â§Ã˜Â¦Ã™Å Ã˜Å’ Ã˜Â³Ã™â€ Ã™â€  Ã˜Â§Ã˜Â¨Ã™â€  Ã™â€¦Ã˜Â§Ã˜Â¬Ã™â€¡Ã˜Å’ Ã™â€¦Ã˜Â´Ã™Æ’Ã˜Â§Ã˜Â© Ã˜Â§Ã™â€žÃ™â€¦Ã˜ÂµÃ˜Â§Ã˜Â¨Ã™Å Ã˜Â­Ã˜Å’ Ã˜Â±Ã™Å Ã˜Â§Ã˜Â¶ Ã˜Â§Ã™â€žÃ˜ÂµÃ˜Â§Ã™â€žÃ˜Â­Ã™Å Ã™â€ Ã˜Å’ Ã™Ë†Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â²Ã™Å Ã˜Â¯. Search 12+ hadith collections including Bukhari, Muslim, Abu Dawud, Tirmidhi, Nasai.">
+<meta name="keywords" content="Ã˜ÂµÃ˜Â­Ã™Å Ã˜Â­ Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â®Ã˜Â§Ã˜Â±Ã™Å , Ã˜ÂµÃ˜Â­Ã™Å Ã˜Â­ Ã™â€¦Ã˜Â³Ã™â€žÃ™â€¦, Ã˜Â³Ã™â€ Ã™â€  Ã˜Â£Ã˜Â¨Ã™Å  Ã˜Â¯Ã˜Â§Ã™Ë†Ã˜Â¯, Ã˜Â§Ã™â€žÃ˜Â¬Ã˜Â§Ã™â€¦Ã˜Â¹ Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â±Ã™â€¦Ã˜Â°Ã™Å , Ã˜Â³Ã™â€ Ã™â€  Ã˜Â§Ã™â€žÃ™â€ Ã˜Â³Ã˜Â§Ã˜Â¦Ã™Å , Ã˜Â³Ã™â€ Ã™â€  Ã˜Â§Ã˜Â¨Ã™â€  Ã™â€¦Ã˜Â§Ã˜Â¬Ã™â€¡, Ã™â€¦Ã˜Â´Ã™Æ’Ã˜Â§Ã˜Â© Ã˜Â§Ã™â€žÃ™â€¦Ã˜ÂµÃ˜Â§Ã˜Â¨Ã™Å Ã˜Â­, Ã˜Â±Ã™Å Ã˜Â§Ã˜Â¶ Ã˜Â§Ã™â€žÃ˜ÂµÃ˜Â§Ã™â€žÃ˜Â­Ã™Å Ã™â€ , Ã˜Â¨Ã™â€žÃ™Ë†Ã˜Âº Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â±Ã˜Â§Ã™â€¦, Ã˜Â§Ã™â€žÃ˜Â£Ã˜Â¯Ã˜Â¨ Ã˜Â§Ã™â€žÃ™â€¦Ã™ÂÃ˜Â±Ã˜Â¯, Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â­Ã˜Â« Ã™ÂÃ™Å  Ã˜Â§Ã™â€žÃ˜Â£Ã˜Â­Ã˜Â§Ã˜Â¯Ã™Å Ã˜Â«, Ã˜Â­Ã˜Â¯Ã™Å Ã˜Â« Ã™â€ Ã˜Â¨Ã™Ë†Ã™Å , Ã˜Â£Ã˜Â­Ã˜Â§Ã˜Â¯Ã™Å Ã˜Â« Ã™â€ Ã˜Â¨Ã™Ë†Ã™Å Ã˜Â©, Ã˜Â­Ã˜Â¯Ã™Å Ã˜Â« Ã˜ÂµÃ˜Â­Ã™Å Ã˜Â­, Ã˜Â­Ã˜Â¯Ã™Å Ã˜Â« Ã˜Â­Ã˜Â³Ã™â€ , Ã˜Â³Ã™â€ Ã˜Â© Ã™â€ Ã˜Â¨Ã™Ë†Ã™Å Ã˜Â©, Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¯Ã™Å Ã˜Â« Ã˜Â§Ã™â€žÃ˜Â´Ã˜Â±Ã™Å Ã™Â, Ã˜Â¹Ã™â€žÃ™â€¦ Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¯Ã™Å Ã˜Â«, Ã˜ÂªÃ˜Â®Ã˜Â±Ã™Å Ã˜Â¬ Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¯Ã™Å Ã˜Â«, Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â­Ã˜Â« Ã™ÂÃ™Å  Ã˜Â§Ã™â€žÃ˜Â³Ã™â€ Ã˜Â©, Ã˜Â£Ã˜Â­Ã˜Â§Ã˜Â¯Ã™Å Ã˜Â« Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â®Ã˜Â§Ã˜Â±Ã™Å , Ã˜Â£Ã˜Â­Ã˜Â§Ã˜Â¯Ã™Å Ã˜Â« Ã™â€¦Ã˜Â³Ã™â€žÃ™â€¦, Ã˜Â§Ã™â€žÃ™Æ’Ã˜ÂªÃ˜Â¨ Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â³Ã˜Â¹Ã˜Â©, Ã™Æ’Ã˜ÂªÃ˜Â¨ Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¯Ã™Å Ã˜Â«, Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¯Ã™Å Ã˜Â« Ã™Ë†Ã˜Â§Ã™â€žÃ˜Â³Ã™â€ Ã˜Â©, Ã™â€šÃ˜Â§Ã˜Â¹Ã˜Â¯Ã˜Â© Ã˜Â¨Ã™Å Ã˜Â§Ã™â€ Ã˜Â§Ã˜Âª Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¯Ã™Å Ã˜Â«, Ã˜ÂªÃ™ÂÃ˜Â³Ã™Å Ã˜Â± Ã˜Â§Ã™â€žÃ˜Â£Ã˜Â­Ã˜Â§Ã˜Â¯Ã™Å Ã˜Â«, Hadith search, Sahih Bukhari, Sahih Muslim, Abu Dawud, Tirmidhi, Nasai, Ibn Majah, Mishkat, Riyadh Salihin, hadith database, Islamic hadith, hadith collection, prophetic hadith">
+<meta name="author" content="Anas Soliman">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://solimananas.github.io/Tasbee7/hadith.html">
+<meta name="i18n-title" content="hadith_title">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ã˜Â¨Ã˜Â§Ã˜Â­Ã˜Â« Ã˜Â§Ã™â€žÃ˜Â£Ã˜Â­Ã˜Â§Ã˜Â¯Ã™Å Ã˜Â« Ã¢â‚¬â€ Ã˜Â²Ã˜Â§Ã˜Â¯ Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â³Ã™â€žÃ™â€¦ | Hadith Search">
+<meta property="og:description" content="Ã˜Â§Ã˜Â¨Ã˜Â­Ã˜Â« Ã™ÂÃ™Å  12+ Ã™â€¦Ã˜Â¬Ã™â€¦Ã™Ë†Ã˜Â¹Ã˜Â© Ã˜Â­Ã˜Â¯Ã™Å Ã˜Â«Ã™Å Ã˜Â©: Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â®Ã˜Â§Ã˜Â±Ã™Å Ã˜Å’ Ã™â€¦Ã˜Â³Ã™â€žÃ™â€¦Ã˜Å’ Ã˜Â£Ã˜Â¨Ã™Ë† Ã˜Â¯Ã˜Â§Ã™Ë†Ã˜Â¯Ã˜Å’ Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â±Ã™â€¦Ã˜Â°Ã™Å Ã˜Å’ Ã˜Â§Ã™â€žÃ™â€ Ã˜Â³Ã˜Â§Ã˜Â¦Ã™Å Ã˜Å’ Ã˜Â§Ã˜Â¨Ã™â€  Ã™â€¦Ã˜Â§Ã˜Â¬Ã™â€¡Ã˜Å’ Ã™Ë†Ã˜Â±Ã™Å Ã˜Â§Ã˜Â¶ Ã˜Â§Ã™â€žÃ˜ÂµÃ˜Â§Ã™â€žÃ˜Â­Ã™Å Ã™â€ . Search 12+ hadith collections.">
+<meta property="og:url" content="https://solimananas.github.io/Tasbee7/hadith.html">
+<meta property="og:image" content="https://solimananas.github.io/Tasbee7/og-image.png">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:site_name" content="Ã˜Â²Ã˜Â§Ã˜Â¯ Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â³Ã™â€žÃ™â€¦">
+<meta property="twitter:card" content="summary_large_image">
+<meta property="twitter:url" content="https://solimananas.github.io/Tasbee7/hadith.html">
+<meta property="twitter:title" content="Ã˜Â¨Ã˜Â§Ã˜Â­Ã˜Â« Ã˜Â§Ã™â€žÃ˜Â£Ã˜Â­Ã˜Â§Ã˜Â¯Ã™Å Ã˜Â« Ã¢â‚¬â€ Ã˜Â²Ã˜Â§Ã˜Â¯ Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â³Ã™â€žÃ™â€¦ | Hadith Search">
+<meta property="twitter:description" content="Ã˜Â§Ã˜Â¨Ã˜Â­Ã˜Â« Ã™ÂÃ™Å  12+ Ã™â€¦Ã˜Â¬Ã™â€¦Ã™Ë†Ã˜Â¹Ã˜Â© Ã˜Â­Ã˜Â¯Ã™Å Ã˜Â«Ã™Å Ã˜Â©: Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â®Ã˜Â§Ã˜Â±Ã™Å Ã˜Å’ Ã™â€¦Ã˜Â³Ã™â€žÃ™â€¦Ã˜Å’ Ã˜Â£Ã˜Â¨Ã™Ë† Ã˜Â¯Ã˜Â§Ã™Ë†Ã˜Â¯Ã˜Å’ Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â±Ã™â€¦Ã˜Â°Ã™Å . Search 12+ hadith collections.">
+<meta property="twitter:image" content="https://solimananas.github.io/Tasbee7/og-image.png">
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Ã˜Â¨Ã˜Â§Ã˜Â­Ã˜Â« Ã˜Â§Ã™â€žÃ˜Â£Ã˜Â­Ã˜Â§Ã˜Â¯Ã™Å Ã˜Â« Ã˜Â§Ã™â€žÃ™â€ Ã˜Â¨Ã™Ë†Ã™Å Ã˜Â© Ã¢â‚¬â€ Ã˜Â²Ã˜Â§Ã˜Â¯ Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â³Ã™â€žÃ™â€¦",
+  "description": "Ã˜Â§Ã˜Â¨Ã˜Â­Ã˜Â« Ã™ÂÃ™Å  Ã˜Â£Ã™Æ’Ã˜Â«Ã˜Â± Ã™â€¦Ã™â€  12 Ã™â€¦Ã˜Â¬Ã™â€¦Ã™Ë†Ã˜Â¹Ã˜Â© Ã˜Â­Ã˜Â¯Ã™Å Ã˜Â«Ã™Å Ã˜Â© Ã˜Â¨Ã™â€¦Ã˜Â§ Ã™ÂÃ™Å Ã™â€¡Ã˜Â§ Ã˜ÂµÃ˜Â­Ã™Å Ã˜Â­ Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â®Ã˜Â§Ã˜Â±Ã™Å  Ã™Ë†Ã˜ÂµÃ˜Â­Ã™Å Ã˜Â­ Ã™â€¦Ã˜Â³Ã™â€žÃ™â€¦ Ã™Ë†Ã˜Â³Ã™â€ Ã™â€  Ã˜Â£Ã˜Â¨Ã™Å  Ã˜Â¯Ã˜Â§Ã™Ë†Ã˜Â¯ Ã™Ë†Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â±Ã™â€¦Ã˜Â°Ã™Å  Ã™Ë†Ã˜Â§Ã™â€žÃ™â€ Ã˜Â³Ã˜Â§Ã˜Â¦Ã™Å  Ã™Ë†Ã˜Â§Ã˜Â¨Ã™â€  Ã™â€¦Ã˜Â§Ã˜Â¬Ã™â€¡ Ã™Ë†Ã˜Â±Ã™Å Ã˜Â§Ã˜Â¶ Ã˜Â§Ã™â€žÃ˜ÂµÃ˜Â§Ã™â€žÃ˜Â­Ã™Å Ã™â€ .",
+  "url": "https://solimananas.github.io/Tasbee7/hadith.html",
+  "applicationCategory": "EducationApplication",
+  "operatingSystem": "Web",
+  "inLanguage": "ar",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": { "@type": "Person", "name": "Anas Soliman" },
+  "featureList": ["12+ hadith collections", "Full-text search", "Sahih Bukhari", "Sahih Muslim", "Abu Dawud", "Tirmidhi", "Nasai", "Ibn Majah", "Riyadh Salihin"]
+}
+</script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
 <style>
-    :root {
-        --primary: #10b981;
-        --bg-dark: #020617;
-        --glass: rgba(255, 255, 255, 0.08);
-        --glass-border: rgba(255, 255, 255, 0.1);
-        --text-main: #f8fafc;
-        --text-muted: #94a3b8;
+    /* ===================== Ã˜Â§Ã™â€žÃ˜Â«Ã™Å Ã™â€¦Ã˜Â§Ã˜Âª ===================== */
+    :root[data-theme="dark"]{
+        --primary:#10b981; --primary-deep:#059669; --primary-soft:rgba(16,185,129,.16);
+        --gold:#e6c068; --gold-deep:#caa24a; --gold-soft:rgba(230,192,104,.12);
+        --bg1:#0e201b; --bg2:#04100c;
+        --surface:rgba(255,255,255,.045); --surface-2:rgba(255,255,255,.075);
+        --border:rgba(230,192,104,.16); --border-strong:rgba(230,192,104,.3);
+        --text:#eef4f1; --muted:#8ba298; --danger:#f87171; --danger-soft:rgba(248,113,113,.14);
+        --meta:#04100c; --shadow:0 18px 50px -12px rgba(0,0,0,.6); --pattern-opacity:.05;
+    }
+    :root[data-theme="light"]{
+        --primary:#0f7a52; --primary-deep:#0a5c3d; --primary-soft:rgba(15,122,82,.1);
+        --gold:#9a7b1f; --gold-deep:#7d6316; --gold-soft:rgba(154,123,31,.1);
+        --bg1:#fcf8ef; --bg2:#ece2cf;
+        --surface:#fffdf7; --surface-2:#fbf6ea;
+        --border:rgba(154,123,31,.2); --border-strong:rgba(154,123,31,.4);
+        --text:#1c2b24; --muted:#5f6f67; --danger:#dc2626; --danger-soft:rgba(220,38,38,.1);
+        --meta:#ece2cf; --shadow:0 14px 40px -16px rgba(60,50,20,.28); --pattern-opacity:.06;
+    }
+    :root[data-theme="sepia"]{
+        --primary:#8a5a1c; --primary-deep:#6e4714; --primary-soft:rgba(138,90,28,.12);
+        --gold:#9a6b1f; --gold-deep:#7d5616; --gold-soft:rgba(154,107,31,.12);
+        --bg1:#f4ecd8; --bg2:#e3d4b3;
+        --surface:#fcf7ea; --surface-2:#f6efdc;
+        --border:rgba(122,84,24,.22); --border-strong:rgba(122,84,24,.42);
+        --text:#3c2a18; --muted:#7a6244; --danger:#b4452b; --danger-soft:rgba(180,69,43,.12);
+        --meta:#e3d4b3; --shadow:0 14px 40px -16px rgba(90,60,20,.3); --pattern-opacity:.07;
     }
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+    *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; outline:none; }
 
-    body {
-        margin: 0; height: 100dvh; overflow: hidden;
-        font-family: 'Tajawal', sans-serif;
-        background: radial-gradient(circle at 50% 0%, #1e293b, var(--bg-dark));
-        color: var(--text-main); display: flex; justify-content: center;
+    @font-face{
+        font-family:'ScheherazadeFont';
+        src:url('/assets/Scheherazade-Bs-Bghdz.ttf') format('truetype');
+        font-display:swap;
     }
 
-    .app-container {
-        width: 100%; max-width: 480px; height: 100%; display: flex; flex-direction: column;
-        padding: max(20px, env(safe-area-inset-top)) 20px 0; position: relative;
+    body{
+        margin:0; height:100dvh; overflow:hidden;
+        font-family:'Tajawal', system-ui, sans-serif;
+        background:
+            radial-gradient(120% 80% at 50% -10%, var(--bg1), var(--bg2) 70%);
+        color:var(--text); display:flex; justify-content:center;
+        transition:background .45s ease, color .45s ease;
+    }
+    /* Ã˜Â®Ã™â€žÃ™ÂÃ™Å Ã˜Â© Ã˜Â²Ã˜Â®Ã˜Â±Ã™ÂÃ™Å Ã˜Â© Ã˜Â¥Ã˜Â³Ã™â€žÃ˜Â§Ã™â€¦Ã™Å Ã˜Â© (Ã˜Â±Ã™ÂÃ˜Â¨Ã˜Â¹ Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â²Ã˜Â¨) Ã¢â‚¬â€ Ã˜Â®Ã™ÂÃ™Å Ã™ÂÃ˜Â© Ã™Ë†Ã™â€¦Ã™Ë†Ã˜Â«Ã™Ë†Ã™â€šÃ˜Â© */
+    body::before{
+        content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+        opacity:var(--pattern-opacity);
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23c9a14a' stroke-width='1'%3E%3Crect x='21' y='21' width='22' height='22'/%3E%3Crect x='21' y='21' width='22' height='22' transform='rotate(45 32 32)'/%3E%3C/g%3E%3C/svg%3E");
+        background-size:64px 64px; background-position:center;
     }
 
-    /* Top Bar */
-    .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-    .page-title { font-size: 20px; font-weight: bold; margin: 0; color: white; }
-    
-    .icon-btn {
-        width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;
-        background: var(--glass); border: 1px solid var(--glass-border); border-radius: 14px;
-        color: white; cursor: pointer; transition: 0.2s;
-    }
-    .icon-btn:active { transform: scale(0.92); }
-
-    /* Main Area (Scrollable) */
-    .main-area { flex: 1; overflow-y: auto; padding-bottom: 40px; scroll-behavior: smooth; }
-    .main-area::-webkit-scrollbar { display: none; }
-
-    /* Hadith of the Day */
-    .daily-card {
-        background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(255, 255, 255, 0.05));
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        border-radius: 20px; padding: 20px; margin-bottom: 25px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
-    .daily-title { color: var(--primary); font-size: 14px; font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;}
-    .daily-text { font-family: 'Amiri', serif; font-size: 18px; line-height: 1.8; color: #e2e8f0; }
-
-    /* Search Bar */
-    .search-wrapper {
-        display: flex; background: var(--glass); border: 1px solid var(--glass-border);
-        border-radius: 16px; padding: 5px; margin-bottom: 15px; position: sticky; top: 0; z-index: 10; backdrop-filter: blur(10px);
-    }
-    .search-input {
-        flex: 1; background: transparent; border: none; color: white; padding: 0 15px;
-        font-family: 'Tajawal', sans-serif; font-size: 16px;
-    }
-    .search-input::placeholder { color: var(--text-muted); }
-    .search-btn {
-        background: var(--primary); color: #020617; border: none; border-radius: 12px;
-        width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; cursor: pointer;
+    .app-container{
+        width:100%; max-width:480px; height:100%; display:flex; flex-direction:column;
+        padding:max(18px, env(safe-area-inset-top)) 18px 0; position:relative; z-index:1;
     }
 
-    /* History Tags */
-    .history-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; }
-    .history-tag {
-        background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
-        padding: 6px 14px; border-radius: 20px; font-size: 13px; color: var(--text-muted);
-        cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 5px;
-    }
-    .history-tag:active { background: rgba(255,255,255,0.1); }
+    /* ===================== Ã˜Â§Ã™â€žÃ˜Â´Ã˜Â±Ã™Å Ã˜Â· Ã˜Â§Ã™â€žÃ˜Â¹Ã™â€žÃ™Ë†Ã™Å  ===================== */
+    .top-bar{ display:flex; align-items:center; justify-content:space-between; padding-bottom:14px; margin-bottom:6px; border-bottom:1px solid var(--border); }
+    .brand{ display:flex; flex-direction:column; align-items:center; gap:2px; }
+    .page-title{ font-size:19px; font-weight:800; margin:0; letter-spacing:.2px; }
+    .page-sub{ font-size:11px; color:var(--gold); font-weight:700; letter-spacing:2px; }
+    .top-actions{ display:flex; gap:8px; }
 
-    /* Results */
-    .hadith-item {
-        background: var(--glass); border: 1px solid var(--glass-border); border-radius: 20px;
-        padding: 20px; margin-bottom: 15px; animation: fadeInUp 0.4s ease-out;
+    .icon-btn{
+        width:42px; height:42px; display:flex; align-items:center; justify-content:center;
+        background:var(--surface); border:1px solid var(--border); border-radius:13px;
+        color:var(--text); cursor:pointer; transition:transform .15s, background .2s, border-color .2s; font-size:19px;
     }
-    .badge-ok { background: rgba(16, 185, 129, 0.2); color: var(--primary); padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; }
-    .badge-warn { background: rgba(239, 68, 68, 0.2); color: #f87171; padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: bold; }
-    .hadith-text { font-family: 'Amiri', serif; font-size: 18px; line-height: 1.8; color: white; margin: 15px 0; }
-    .hadith-meta { font-size: 13px; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; line-height: 1.6; }
+    .icon-btn:hover{ border-color:var(--border-strong); }
+    .icon-btn:active{ transform:scale(.9); }
 
-    /* Loader & Toast */
-    .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--primary); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; display: none; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    /* ===================== Ã˜Â§Ã™â€žÃ™â€¦Ã™â€ Ã˜Â·Ã™â€šÃ˜Â© Ã˜Â§Ã™â€žÃ˜Â±Ã˜Â¦Ã™Å Ã˜Â³Ã™Å Ã˜Â© ===================== */
+    .main-area{ flex:1; overflow-y:auto; padding:16px 0 60px; scroll-behavior:smooth; }
+    .main-area::-webkit-scrollbar{ display:none; }
 
-    #toast {
-        position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
-        background: rgba(16, 185, 129, 0.9); color: white; padding: 12px 24px; border-radius: 50px;
-        z-index: 200; transition: 0.4s; backdrop-filter: blur(5px); font-weight: bold;
+    #dbStatus{
+        text-align:center; font-size:12px; color:var(--muted); margin-bottom:14px;
+        background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:9px 12px;
+        transition:opacity .4s; font-weight:500;
     }
-    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ===================== Ã˜Â¨Ã˜Â·Ã˜Â§Ã™â€šÃ˜Â© Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¯Ã™Å Ã˜Â« Ã˜Â§Ã™â€žÃ™â€¦Ã™â€¦Ã™Å Ã˜Â² ===================== */
+    .daily-card{
+        position:relative; background:var(--surface); border:1px solid var(--border);
+        border-radius:22px; padding:22px 20px 18px; margin-bottom:18px; overflow:hidden;
+        box-shadow:var(--shadow);
+    }
+    .daily-card::before{
+        content:""; position:absolute; top:0; right:0; left:0; height:3px;
+        background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .daily-title{
+        display:flex; align-items:center; gap:8px; color:var(--gold);
+        font-size:13px; font-weight:800; letter-spacing:.3px; margin-bottom:14px;
+        text-transform:none;
+    }
+    .daily-title svg{ width:17px; stroke:var(--gold); }
+    .daily-title::after{ content:""; flex:1; height:1px; background:var(--border); }
+    .daily-text{
+        font-family:'Amiri','ScheherazadeFont', serif; font-size:24px; line-height:2;
+        text-align:justify; word-spacing:1px;
+    }
+    .daily-meta{
+        font-family:'Tajawal', sans-serif; font-size:12.5px; color:var(--primary);
+        font-weight:700; background:var(--primary-soft); padding:4px 10px; border-radius:8px;
+    }
+
+    /* ===================== Ã˜Â²Ã˜Â± Ã˜Â§Ã™â€žÃ˜ÂªÃ˜ÂµÃ™ÂÃ˜Â­ ===================== */
+    .action-btn{
+        display:flex; align-items:center; justify-content:center; gap:10px; width:100%;
+        background:linear-gradient(135deg, var(--surface-2), var(--surface));
+        border:1px solid var(--border); padding:14px; border-radius:16px; color:var(--text);
+        font-weight:700; font-family:inherit; cursor:pointer; margin-bottom:18px;
+        transition:transform .15s, border-color .2s; font-size:15px;
+    }
+    .action-btn:hover{ border-color:var(--border-strong); }
+    .action-btn:active{ transform:scale(.97); }
+    .action-btn svg{ width:18px; stroke:var(--gold); }
+
+    /* ===================== Ã˜Â´Ã˜Â±Ã™Å Ã˜Â· Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â­Ã˜Â« ===================== */
+    .search-wrapper{
+        display:flex; align-items:center; background:var(--surface); border:1.5px solid var(--border);
+        border-radius:16px; padding:4px 6px; margin-bottom:14px; position:sticky; top:0; z-index:10;
+        box-shadow:0 6px 18px -8px rgba(0,0,0,.25); backdrop-filter:blur(14px);
+        transition:border-color .25s, box-shadow .25s;
+    }
+    .search-wrapper:focus-within{ border-color:var(--primary); box-shadow:0 0 0 4px var(--primary-soft); }
+    .search-wrapper .search-icon{ width:20px; height:20px; margin-inline-start:10px; stroke:var(--muted); flex-shrink:0; }
+    .search-input{
+        flex:1; background:transparent; border:none; color:var(--text); padding:11px 10px;
+        font-family:'Tajawal', sans-serif; font-size:16px; width:100%;
+    }
+    .search-input::placeholder{ color:var(--muted); }
+    .search-input:disabled{ opacity:.5; }
+    .clear-input-btn{
+        background:var(--surface-2); border:none; color:var(--muted); width:30px; height:30px;
+        border-radius:50%; display:none; font-size:14px; cursor:pointer; flex-shrink:0;
+        align-items:center; justify-content:center; transition:.15s;
+    }
+    .clear-input-btn:active{ transform:scale(.85); }
+
+    /* ===================== Ã™ÂÃ™â€žÃ˜ÂªÃ˜Â± Ã˜Â§Ã™â€žÃ™Æ’Ã˜ÂªÃ˜Â¨ ===================== */
+    .filter-label{ font-size:11px; font-weight:700; color:var(--muted); letter-spacing:1px; margin:4px 2px 8px; }
+    .books-filter{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom:14px; }
+    .book-label{
+        background:var(--surface); border:1px solid var(--border); padding:7px 13px; border-radius:20px;
+        font-size:12px; color:var(--muted); cursor:pointer; transition:.18s; user-select:none;
+        display:flex; align-items:center; gap:5px;
+    }
+    .book-label input{ display:none; }
+    .book-label:has(input:checked){
+        background:var(--primary-soft); border-color:var(--primary); color:var(--primary-deep); font-weight:700;
+    }
+    :root[data-theme="dark"] .book-label:has(input:checked){ color:var(--text); }
+
+    /* Ã™â€¦Ã™ÂÃ˜ÂªÃ˜Â§Ã˜Â­ Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â´Ã™Æ’Ã™Å Ã™â€ž */
+    .tashkeel-toggle{
+        display:flex; align-items:center; justify-content:space-between; gap:10px;
+        font-size:13px; color:var(--muted); margin-bottom:16px; background:var(--surface);
+        border:1px solid var(--border); border-radius:14px; padding:10px 14px; cursor:pointer;
+    }
+    .tashkeel-toggle .switch{ position:relative; width:42px; height:24px; flex-shrink:0; }
+    .tashkeel-toggle input{ display:none; }
+    .switch .track{ position:absolute; inset:0; background:var(--surface-2); border:1px solid var(--border); border-radius:20px; transition:.25s; }
+    .switch .thumb{ position:absolute; top:3px; right:3px; width:18px; height:18px; border-radius:50%; background:var(--muted); transition:.25s; }
+    .tashkeel-toggle input:checked + .track{ background:var(--primary-soft); border-color:var(--primary); }
+    .tashkeel-toggle input:checked + .track .thumb{ right:21px; background:var(--primary); }
+
+    /* ===================== Ã˜Â³Ã˜Â¬Ã™â€ž Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â­Ã˜Â« ===================== */
+    .history-container{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom:20px; align-items:center; }
+    .history-tag{
+        background:var(--surface); border:1px solid var(--border); padding:6px 14px; border-radius:20px;
+        font-size:13px; color:var(--muted); cursor:pointer; transition:.18s; display:flex; align-items:center; gap:6px;
+    }
+    .history-tag::before{ content:"Ã¢Å¸Â²"; color:var(--gold); font-size:12px; }
+    .history-tag:active{ transform:scale(.95); }
+    .clear-history-btn{
+        background:var(--danger-soft); border:1px solid transparent; color:var(--danger);
+        padding:6px 14px; border-radius:20px; font-size:12px; font-weight:700; cursor:pointer; transition:.18s;
+    }
+    .clear-history-btn:active{ transform:scale(.95); }
+
+    /* ===================== Ã™â€¦Ã™â€žÃ˜Â®Ã˜Âµ Ã˜Â§Ã™â€žÃ™â€ Ã˜ÂªÃ˜Â§Ã˜Â¦Ã˜Â¬ ===================== */
+    .results-summary{
+        background:var(--surface); border:1px solid var(--border); padding:13px 15px; border-radius:14px;
+        margin-bottom:18px; font-size:14px; text-align:center; display:none; line-height:1.7;
+    }
+    .results-summary b{ font-weight:800; margin:0 3px; }
+    .summary-ok{ color:var(--primary); }
+    .summary-warn{ color:var(--danger); }
+
+    /* ===================== Ã˜Â¨Ã˜Â·Ã˜Â§Ã™â€šÃ˜Â© Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¯Ã™Å Ã˜Â« ===================== */
+    .hadith-item{
+        position:relative; background:var(--surface); border:1px solid var(--border); border-radius:20px;
+        padding:18px 18px 16px; margin-bottom:14px; animation:fadeInUp .45s ease-out both;
+        overflow:hidden;
+    }
+    .hadith-item::before{ content:""; position:absolute; top:0; bottom:0; right:0; width:4px; background:var(--primary); }
+    .hadith-item.warn::before{ background:var(--danger); }
+    .hadith-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+    .badge-ok{ background:var(--primary-soft); color:var(--primary-deep); padding:5px 12px; border-radius:9px; font-size:12px; font-weight:800; }
+    .badge-warn{ background:var(--danger-soft); color:var(--danger); padding:5px 12px; border-radius:9px; font-size:12px; font-weight:800; }
+    :root[data-theme="dark"] .badge-ok{ color:var(--primary); }
+    .hadith-text{
+        font-family:'Amiri','ScheherazadeFont', serif; font-size:23px; line-height:2;
+        margin:6px 0 14px; text-align:justify; word-spacing:1px;
+    }
+    .hadith-meta{ font-size:12.5px; color:var(--muted); border-top:1px solid var(--border); padding-top:11px; line-height:1.7; }
+    .hadith-meta b{ color:var(--text); font-weight:700; }
+    .search-highlight{ background:var(--gold-soft); color:var(--gold-deep); border-radius:4px; padding:0 3px; font-weight:700; }
+    :root[data-theme="dark"] .search-highlight{ color:var(--gold); }
+
+    /* Ã˜Â£Ã™Å Ã™â€šÃ™Ë†Ã™â€ Ã˜Â§Ã˜Âª Ã˜Â¯Ã˜Â§Ã˜Â®Ã™â€ž Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â·Ã˜Â§Ã™â€šÃ˜Â§Ã˜Âª */
+    .card-actions{ display:flex; gap:6px; }
+    .card-action-btn{
+        width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+        background:var(--surface-2); border:1px solid var(--border); border-radius:10px;
+        color:var(--text); cursor:pointer; transition:.18s; text-decoration:none;
+    }
+    .card-action-btn svg{ stroke:var(--gold); }
+    .card-action-btn:active{ transform:scale(.88); background:var(--primary-soft); }
+
+    /* ===================== Ã˜Â­Ã˜Â§Ã™â€žÃ˜Â§Ã˜Âª Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â­Ã™â€¦Ã™Å Ã™â€ž Ã™Ë†Ã˜Â§Ã™â€žÃ™ÂÃ˜Â±Ã˜Â§Ã˜Âº ===================== */
+    .loader{ border:3px solid var(--border); border-top:3px solid var(--primary); border-radius:50%; width:30px; height:30px; animation:spin 1s linear infinite; margin:24px auto; display:none; }
+    .scroll-loader{ text-align:center; color:var(--muted); font-size:12px; padding:12px; display:none; }
+    .empty-state{ text-align:center; color:var(--muted); padding:36px 16px; }
+    .empty-state .icn{ font-size:34px; display:block; margin-bottom:10px; opacity:.6; }
+
+    /* ===================== Ã˜Â§Ã™â€žÃ™â€¦Ã™Ë†Ã˜Â¯Ã˜Â§Ã™â€ž ===================== */
+    .modal-overlay{
+        position:fixed; inset:0; background:rgba(0,0,0,.55); backdrop-filter:blur(6px);
+        display:flex; justify-content:center; align-items:flex-end; z-index:1000;
+        opacity:0; pointer-events:none; transition:.3s ease;
+    }
+    .modal-overlay.active{ opacity:1; pointer-events:auto; }
+    .modal-content{
+        background:var(--bg1); border:1px solid var(--border); border-bottom:none;
+        width:100%; max-width:480px; border-radius:24px 24px 0 0; padding:22px 22px max(22px,env(safe-area-inset-bottom));
+        transform:translateY(40px); transition:.32s cubic-bezier(.22,1,.36,1); box-shadow:0 -10px 40px rgba(0,0,0,.3);
+    }
+    .modal-overlay.active .modal-content{ transform:translateY(0); }
+    .modal-grip{ width:42px; height:4px; background:var(--border-strong); border-radius:4px; margin:0 auto 16px; }
+    .modal-header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; font-weight:800; font-size:17px; }
+    .modal-header .close{ background:var(--surface-2); border:none; color:var(--muted); width:32px; height:32px; border-radius:50%; cursor:pointer; font-size:15px; }
+    .book-link-btn{
+        display:flex; align-items:center; justify-content:space-between; background:var(--surface);
+        border:1px solid var(--border); padding:15px; border-radius:14px; margin-bottom:9px;
+        color:var(--text); text-decoration:none; font-weight:600; transition:.18s;
+    }
+    .book-link-btn svg{ width:17px; stroke:var(--gold); }
+    .book-link-btn:active{ transform:scale(.97); background:var(--surface-2); }
+
+    /* ===================== Ã˜Â§Ã™â€žÃ˜ÂªÃ™â€ Ã˜Â¨Ã™Å Ã™â€¡ ===================== */
+    #toast{
+        position:fixed; top:18px; left:50%; transform:translateX(-50%) translateY(-120px);
+        background:var(--primary-deep); color:#fff; padding:12px 24px; border-radius:50px; z-index:2000;
+        transition:.4s cubic-bezier(.22,1,.36,1); font-weight:700; font-size:14px;
+        box-shadow:0 12px 30px rgba(0,0,0,.25); display:flex; align-items:center; gap:8px;
+    }
+    #toast.show{ transform:translateX(-50%) translateY(0); }
+
+    @keyframes spin{ to{ transform:rotate(360deg); } }
+    @keyframes fadeInUp{ from{ opacity:0; transform:translateY(12px); } to{ opacity:1; transform:translateY(0); } }
 </style>
+  <link rel="stylesheet" crossorigin href="/assets/svg-theme-CIpxdnpQ.css">
 </head>
 <body>
 
 <div id="toast"><span></span></div>
 
-<div class="app-container">
-    <div class="top-bar">
-        <div class="icon-btn" onclick="window.location.href='index.html'" title="رجوع للمسبحة">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;">
-                <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
+<div class="modal-overlay" id="booksModal" onclick="if(event.target === this) toggleModal(false)">
+    <div class="modal-content">
+        <div class="modal-grip"></div>
+        <div class="modal-header">
+            <span data-i18n="hadith_browse_books"><img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='currentColor'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3e%3cpath%20d='M4%2019.5A2.5%202.5%200%200%201%206.5%2017H20'/%3e%3cpath%20d='M6.5%202H20v20H6.5A2.5%202.5%200%200%201%204%2019.5v-15A2.5%202.5%200%200%201%206.5%202z'/%3e%3cline%20x1='8'%20y1='7'%20x2='16'%20y2='7'/%3e%3cline%20x1='8'%20y1='11'%20x2='14'%20y2='11'/%3e%3c/svg%3e" class="setting-icon" style="width:1em;height:1em;vertical-align:-0.125em;"> Ã˜ÂªÃ˜ÂµÃ™ÂÃ˜Â­ Ã˜Â§Ã™â€žÃ™Æ’Ã˜ÂªÃ˜Â¨ Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¯Ã™Å Ã˜Â«Ã™Å Ã˜Â©</span>
+            <button class="close" onclick="toggleModal(false)" aria-label="Ã˜Â¥Ã˜ÂºÃ™â€žÃ˜Â§Ã™â€š"><img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='currentColor'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3e%3cline%20x1='18'%20y1='6'%20x2='6'%20y2='18'/%3e%3cline%20x1='6'%20y1='6'%20x2='18'%20y2='18'/%3e%3c/svg%3e" class="close-icon" style="width:1em;height:1em;vertical-align:-0.125em;"></button>
         </div>
-        <h1 class="page-title">باحث الأحاديث</h1>
-        <div style="width: 45px;"></div> </div>
-
-    <div class="main-area">
-        <div class="daily-card" id="dailyCard">
-           <div class="daily-title">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;">
-        <path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path>
-        <path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3c0 1 0 1 1 1z"></path>
-    </svg>
-    حديث اليوم
+        <div id="modalBooksContainer"></div>
+    </div>
 </div>
 
-            <div class="daily-text" id="dailyHadithText">...</div>
+<div class="app-container">
+    <div class="top-bar">
+        <div class="icon-btn" onclick="window.location.href='index.html'" aria-label="Ã˜Â±Ã˜Â¬Ã™Ë†Ã˜Â¹">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;stroke-linecap:round;stroke-linejoin:round;"><polyline points="15 18 9 12 15 6"></polyline></svg>
         </div>
 
-        <div class="search-wrapper">
-            <input type="text" id="searchInput" class="search-input" placeholder="ابحث في السنة النبوية..." onkeypress="handleEnter(event)">
-            <button class="search-btn" onclick="performSearch()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:20px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </button>
+        <div class="brand">
+            <h1 class="page-title" data-i18n="hadith_title">Ã˜Â¨Ã˜Â§Ã˜Â­Ã˜Â« Ã˜Â§Ã™â€žÃ˜Â£Ã˜Â­Ã˜Â§Ã˜Â¯Ã™Å Ã˜Â«</h1>
+            <span class="page-sub">Ã˜Â²Ã˜Â§Ã˜Â¯ Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â³Ã™â€žÃ™â€¦</span>
         </div>
+
+        <div class="top-actions">
+            <div class="icon-btn" onclick="cycleTheme()" title="Ã˜ÂªÃ˜ÂºÃ™Å Ã™Å Ã˜Â± Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â¸Ã™â€¡Ã˜Â±"><img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='currentColor'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3e%3cpath%20d='M21%2012.79A9%209%200%201%201%2011.21%203%207%207%200%200%200%2021%2012.79z'/%3e%3c/svg%3e" class="action-icon" style="width:1em;height:1em;vertical-align:-0.125em;"></div>
+            <div class="icon-btn" onclick="downloadDatabase()" title="Ã˜ÂªÃ˜Â­Ã™â€¦Ã™Å Ã™â€ž Ã™â€šÃ˜Â§Ã˜Â¹Ã˜Â¯Ã˜Â© Ã˜Â§Ã™â€žÃ˜Â¨Ã™Å Ã˜Â§Ã™â€ Ã˜Â§Ã˜Âª Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â¯Ã™â€¦Ã˜Â¬Ã˜Â©">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:18px;stroke-linecap:round;stroke-linejoin:round;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-area">
+        <div id="dbStatus" data-i18n="hadith_loading_db">Ã˜Â¬Ã˜Â§Ã˜Â±Ã™Å  Ã˜ÂªÃ˜Â­Ã™â€¦Ã™Å Ã™â€ž Ã˜Â§Ã™â€žÃ™Æ’Ã˜ÂªÃ˜Â¨... Ã¢ÂÂ³</div>
+
+        <div class="daily-card" id="dailyCard">
+           <div class="daily-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="stroke-linecap:round;stroke-linejoin:round;"><path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V20c0 1 0 1 1 1z"></path></svg>
+                <span data-i18n="hadith_daily_title">Ã˜Â­Ã˜Â¯Ã™Å Ã˜Â« Ã™â€¦Ã™â€  Ã˜Â²Ã˜Â§Ã˜Â¯Ã™Æ’</span>
+           </div>
+           <div class="daily-text" id="dailyHadithText" data-i18n="hadith_loading">Ã˜Â¬Ã˜Â§Ã˜Â±Ã™Å  Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â­Ã™â€¦Ã™Å Ã™â€ž...</div>
+        </div>
+
+        <button class="action-btn" onclick="window.location.href='hadith-viewer.html'">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+            <span data-i18n="hadith_browse_btn">Ã˜ÂªÃ˜ÂµÃ™ÂÃ˜Â­ Ã˜Â§Ã™â€žÃ™Æ’Ã˜ÂªÃ˜Â¨ Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¯Ã™Å Ã˜Â«Ã™Å Ã˜Â©</span>
+        </button>
+
+        <div class="search-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="searchInput" class="search-input" placeholder="Ã˜Â§Ã˜Â¨Ã˜Â­Ã˜Â« Ã™ÂÃ™Å  Ã˜Â§Ã™â€žÃ˜Â³Ã™ÂÃ™â€ Ã™â€˜Ã˜Â© Ã˜Â§Ã™â€žÃ™â€ Ã˜Â¨Ã™Ë†Ã™Å Ã˜Â©..." data-i18n-placeholder="hadith_search_placeholder" disabled>
+            <button class="clear-input-btn" id="clearInputBtn" onclick="clearSearchField()" aria-label="Ã™â€¦Ã˜Â³Ã˜Â­"><img src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='currentColor'%20stroke-width='2'%20stroke-linecap='round'%20stroke-linejoin='round'%3e%3cline%20x1='18'%20y1='6'%20x2='6'%20y2='18'/%3e%3cline%20x1='6'%20y1='6'%20x2='18'%20y2='18'/%3e%3c/svg%3e" class="close-icon" style="width:1em;height:1em;vertical-align:-0.125em;"></button>
+        </div>
+
+        <div class="filter-label" data-i18n="hadith_filter_label">Ã˜ÂªÃ˜ÂµÃ™ÂÃ™Å Ã˜Â© Ã˜Â­Ã˜Â³Ã˜Â¨ Ã˜Â§Ã™â€žÃ™Æ’Ã˜ÂªÃ˜Â§Ã˜Â¨</div>
+        <div class="books-filter" id="booksFilter"></div>
+
+        <label class="tashkeel-toggle">
+            <span data-i18n="hadith_tashkeel_toggle">Ã™â€¦Ã˜Â·Ã˜Â§Ã˜Â¨Ã™â€šÃ˜Â© Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â´Ã™Æ’Ã™Å Ã™â€ž Ã˜Â¨Ã˜Â¯Ã™â€šÃ˜Â©</span>
+            <span class="switch">
+                <input type="checkbox" id="strictTashkeel" onchange="initiateSearch()">
+                <span class="track"><span class="thumb"></span></span>
+            </span>
+        </label>
 
         <div class="history-container" id="historyTags"></div>
 
         <div class="loader" id="loader"></div>
-        <div id="resultsContainer">
-            <div style="text-align: center; color: var(--text-muted); margin-top: 40px; opacity: 0.6;" id="emptyState">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width: 60px; margin-bottom: 10px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                <p>اكتب كلمة أو جملة من الحديث للتحقق من صحته</p>
-            </div>
-        </div>
+        <div id="resultsSummary" class="results-summary"></div>
+        <div id="resultsContainer"></div>
+
+        <div id="scrollTrigger" class="scroll-loader" data-i18n="hadith_loading_more">Ã˜Â¬Ã˜Â§Ã˜Â±Ã™Å  Ã˜ÂªÃ˜Â­Ã™â€¦Ã™Å Ã™â€ž Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â²Ã™Å Ã˜Â¯...</div>
     </div>
 </div>
 
+<script src="js/i18n.js"></script>
+<script src="js/theme-manager.js"></script>
+<script src="js/back-close.js"></script>
 <script>
-    // ================= حديث اليوم =================
-    const dailyHadiths = [
-        "قال رسول الله ﷺ: «عجبًا لأمرِ المؤمنِ، إن أمرَه كلَّه خيرٌ، وليس ذاك لأحدٍ إلا للمؤمنِ، إن أصابته سراءُ شكرَ، فكان خيرًا له، وإن أصابته ضراءُ صبر، فكان خيرًا له» [صحيح مسلم].",
-        "قال رسول الله ﷺ: «ما يُصِيبُ المُسْلِمَ، مِن نَصَبٍ ولَا وصَبٍ، ولَا هَمٍّ ولَا حُزْنٍ ولَا أذًى ولَا غَمٍّ، حتَّى الشَّوْكَةِ يُشَاكُهَا، إلَّا كَفَّرَ اللَّهُ بهَا مِن خَطَايَاهُ» [صحيح البخاري].",
-        "قال رسول الله ﷺ: «أحَبُّ الأعْمالِ إلى اللَّهِ تَعالى أدْوَمُها وإنْ قَلَّ» [صحيح مسلم].",
-        "قال رسول الله ﷺ: «مَن نَفَّسَ عن مُؤْمِنٍ كُرْبَةً مِن كُرَبِ الدُّنْيَا، نَفَّسَ اللَّهُ عنْه كُرْبَةً مِن كُرَبِ يَومِ القِيَامَةِ، ومَن يَسَّرَ علَى مُعْسِرٍ، يَسَّرَ اللَّهُ عليه في الدُّنْيَا والآخِرَةِ» [صحيح مسلم]."
-    ];
-    
-    const dayOfYear = Math.floor((new Date() - new Date(new Date().getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
-    document.getElementById('dailyHadithText').innerText = dailyHadiths[dayOfYear % dailyHadiths.length];
+    // ===================== Ã˜Â§Ã™â€žÃ˜Â«Ã™Å Ã™â€¦Ã˜Â§Ã˜Âª =====================
+    ThemeManager.init();
+    function cycleTheme() { ThemeManager.cycle(); }
 
-    // ================= سجل البحث =================
-    let searchHistory = JSON.parse(localStorage.getItem('hadithHistory')) || [];
+    // ===================== Ã˜Â§Ã™â€žÃ™Æ’Ã˜ÂªÃ˜Â¨ =====================
+    const BOOKS_INFO = [
+        { id: 'bukhari',  name: 'Ã˜ÂµÃ˜Â­Ã™Å Ã˜Â­ Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â®Ã˜Â§Ã˜Â±Ã™Å ' },
+        { id: 'muslim',   name: 'Ã˜ÂµÃ˜Â­Ã™Å Ã˜Â­ Ã™â€¦Ã˜Â³Ã™â€žÃ™â€¦' },
+        { id: 'abudawud', name: 'Ã˜Â³Ã™â€ Ã™â€  Ã˜Â£Ã˜Â¨Ã™Å  Ã˜Â¯Ã˜Â§Ã™Ë†Ã˜Â¯' },
+        { id: 'tirmidhi', name: 'Ã˜Â¬Ã˜Â§Ã™â€¦Ã˜Â¹ Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â±Ã™â€¦Ã˜Â°Ã™Å ' },
+        { id: 'nasai',    name: 'Ã˜Â³Ã™â€ Ã™â€  Ã˜Â§Ã™â€žÃ™â€ Ã˜Â³Ã˜Â§Ã˜Â¦Ã™Å ' },
+        { id: 'ibnmajah', name: 'Ã˜Â³Ã™â€ Ã™â€  Ã˜Â§Ã˜Â¨Ã™â€  Ã™â€¦Ã˜Â§Ã˜Â¬Ã™â€¡' }
+    ];
+
+    let localDatabase = [];
+    let currentSearchResults = [];
+    let currentRenderIndex = 0;
+    const CHUNK_SIZE = 20;
+    let scrollObserver = null;
+
+    // ===================== Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â·Ã˜Â¨Ã™Å Ã˜Â¹ (Ã™Å Ã™ÂÃ˜Â¹Ã˜Â±Ã™Å½Ã™â€˜Ã™Â Ã™â€¦Ã˜Â¨Ã™Æ’Ã˜Â±Ã˜Â§Ã™â€¹ Ã™â€žÃ™Å Ã™ÂÃ˜Â³Ã˜ÂªÃ˜Â®Ã˜Â¯Ã™â€¦ Ã˜Â¹Ã™â€ Ã˜Â¯ Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â­Ã™â€¦Ã™Å Ã™â€ž) =====================
+    const TASHKEEL_STR = "\\u064B-\\u065F\\u0670";
+    const TASHKEEL_REGEX = new RegExp("[" + TASHKEEL_STR + "]", "g");
+
+    function normalizeText(text) {
+        return (text || "")
+            .replace(TASHKEEL_REGEX, '')
+            .replace(/[Ã˜Â£Ã˜Â¥Ã˜Â¢]/g, 'Ã˜Â§')
+            .replace(/Ã˜Â©/g, 'Ã™â€¡')
+            .replace(/Ã™â€°/g, 'Ã™Å ')
+            .replace(/Ã™â‚¬/g, '');   // Ã˜Â¥Ã˜Â²Ã˜Â§Ã™â€žÃ˜Â© Ã˜Â§Ã™â€žÃ˜ÂªÃ˜Â·Ã™Ë†Ã™Å Ã™â€ž (Ã˜Â§Ã™â€žÃ™Æ’Ã˜Â´Ã™Å Ã˜Â¯Ã˜Â©)
+    }
+    function escapeRegex(s) {
+        return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    function buildRegex(query) {
+        let clean = normalizeText(query), pattern = "";
+        for (let char of clean) {
+            if (/[Ã˜Â§Ã˜Â£Ã˜Â¥Ã˜Â¢]/.test(char)) pattern += "[Ã˜Â£Ã˜Â¥Ã˜Â¢Ã˜Â§]";
+            else if (/[Ã˜Â©Ã™â€¡]/.test(char)) pattern += "[Ã˜Â©Ã™â€¡]";
+            else if (/[Ã™â€°Ã™Å ]/.test(char)) pattern += "[Ã™â€°Ã™Å ]";
+            else if (char === ' ') pattern += "\\s+";
+            else pattern += escapeRegex(char);
+            if (char !== ' ') pattern += "[" + TASHKEEL_STR + "]*";
+        }
+        return new RegExp('(' + pattern + ')', 'g');
+    }
+
+    // ===================== Ã˜ÂªÃ˜Â­Ã™â€¦Ã™Å Ã™â€ž Ã™â€šÃ˜Â§Ã˜Â¹Ã˜Â¯Ã˜Â© Ã˜Â§Ã™â€žÃ˜Â¨Ã™Å Ã˜Â§Ã™â€ Ã˜Â§Ã˜Âª =====================
+    async function loadBooks() {
+        const status = document.getElementById('dbStatus');
+        renderBookFilters();
+        renderModalBooks();
+        renderHistory();
+
+        try {
+            let translatedIndex = {};
+            try {
+                const indexRes = await fetch('assets/hadith/Index-translated.json');
+                if (indexRes.ok) translatedIndex = await indexRes.json();
+            } catch (e) { console.log(t('hadith_index_missing')); }
+
+            const fetchPromises = BOOKS_INFO.map(book =>
+                fetch(`assets/hadith/${book.id}.json`)
+                    .then(res => res.ok ? res.json() : null)
+                    .then(data => ({ id: book.id, name: book.name, data }))
+                    .catch(() => ({ id: book.id, name: book.name, data: null }))
+            );
+
+            const results = await Promise.all(fetchPromises);
+            let loadedBooks = 0, failedBooks = [];
+
+            results.forEach(res => {
+                if (res && res.data && res.data.hadiths) {
+                    loadedBooks++;
+                    res.data.hadiths.forEach(h => {
+                        let sectionName = "", sectionNumber = "";
+                        if (h.reference && h.reference.book !== undefined) {
+                            sectionNumber = h.reference.book.toString();
+                            if (translatedIndex[res.id] && translatedIndex[res.id].sections) {
+                                sectionName = translatedIndex[res.id].sections[sectionNumber] || "";
+                            }
+                        }
+                        localDatabase.push({
+                            bookId: res.id,
+                            bookName: res.name,
+                            sectionName,
+                            sectionNumber,
+                            text: h.text,
+                            normalized: normalizeText(h.text), // <img src="img/SVG/zap.svg" class="setting-icon" style="width:1em;height:1em;vertical-align:-0.125em;"> Ã˜ÂªÃ˜Â·Ã˜Â¨Ã™Å Ã˜Â¹ Ã™â€¦Ã˜Â³Ã˜Â¨Ã™â€š Ã™â€žÃ˜ÂªÃ˜Â³Ã˜Â±Ã™Å Ã˜Â¹ Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â­Ã˜Â«
+                            number: h.hadithnumber || h.arabicnumber,
+                            grades: h.grades || []
+                        });
+                    });
+                } else {
+                    failedBooks.push(res.name);
+                }
+            });
+
+            if (localDatabase.length > 0) {
+                let msg = t('hadith_loaded_count', { n: localDatabase.length.toLocaleString('ar-EG') });
+                if (failedBooks.length) msg += ' (' + t('hadith_load_failed', { books: failedBooks.join(', ') }) + ')';
+                status.innerHTML = msg;
+                status.style.color = 'var(--primary)';
+                document.getElementById('searchInput').disabled = false;
+                fetchRandomHadith();
+                setTimeout(() => { status.style.opacity = '0'; setTimeout(() => status.style.display = 'none', 400); }, 3500);
+            } else {
+                throw new Error(t('hadith_not_found'));
+            }
+        } catch (error) {
+            status.innerHTML = t('hadith_db_error');
+            status.style.color = 'var(--danger)';
+            document.getElementById('dailyHadithText').innerHTML = t('hadith_db_load_failed');
+        }
+    }
+
+    // ===================== Ã˜Â³Ã˜Â¬Ã™â€ž Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â­Ã˜Â« =====================
+    let searchHistory = [];
+    try { searchHistory = JSON.parse(localStorage.getItem('hadithHistory')) || []; } catch (e) { searchHistory = []; }
 
     function renderHistory() {
         const container = document.getElementById('historyTags');
         container.innerHTML = '';
+        if (!searchHistory.length) return;
+
         searchHistory.forEach(term => {
             const tag = document.createElement('span');
             tag.className = 'history-tag';
-            tag.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> ${term}`;
-            tag.onclick = () => { document.getElementById('searchInput').value = term; performSearch(); };
+            tag.textContent = term;
+            tag.onclick = () => {
+                const input = document.getElementById('searchInput');
+                input.value = term;
+                document.getElementById('clearInputBtn').style.display = 'flex';
+                initiateSearch();
+            };
             container.appendChild(tag);
         });
-    }
 
+        const clearBtn = document.createElement('span');
+        clearBtn.className = 'clear-history-btn';
+        clearBtn.textContent = t('hadith_clear_history');
+        clearBtn.onclick = clearHistory;
+        container.appendChild(clearBtn);
+    }
     function saveToHistory(term) {
-        if (!term) return;
+        if (!term || term.length < 3) return;
         searchHistory = searchHistory.filter(t => t !== term);
         searchHistory.unshift(term);
-        if (searchHistory.length > 5) searchHistory.pop(); 
+        if (searchHistory.length > 6) searchHistory.pop();
         localStorage.setItem('hadithHistory', JSON.stringify(searchHistory));
         renderHistory();
     }
+    function clearHistory() {
+        searchHistory = [];
+        localStorage.removeItem('hadithHistory');
+        renderHistory();
+        showToast(t('hadith_history_cleared'));
+    }
 
-    function handleEnter(e) { if (e.key === 'Enter') performSearch(); }
+    // ===================== Ã™Ë†Ã˜Â§Ã˜Â¬Ã™â€¡Ã˜Â© Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â³Ã˜ÂªÃ˜Â®Ã˜Â¯Ã™â€¦ =====================
+    function renderBookFilters() {
+        const container = document.getElementById('booksFilter');
+        BOOKS_INFO.forEach(book => {
+            const label = document.createElement('label');
+            label.className = 'book-label';
+            label.innerHTML = `<input type="checkbox" value="${book.id}" checked onchange="initiateSearch()"> ${book.name}`;
+            container.appendChild(label);
+        });
+    }
+    function renderModalBooks() {
+        const container = document.getElementById('modalBooksContainer');
+        BOOKS_INFO.forEach(book => {
+            const link = document.createElement('a');
+            link.href = `hadith-viewer.html?book=${book.id}`;
+            link.className = 'book-link-btn';
+            link.innerHTML = `<span>${book.name}</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>`;
+            container.appendChild(link);
+        });
+    }
+    function toggleModal(show) {
+        const el = document.getElementById('booksModal');
+        if (window.BackClose) {
+            if (show && !el.classList.contains('active')) BackClose.opened(function () { toggleModal(false); });
+            else if (!show && el.classList.contains('active')) BackClose.closed();
+        }
+        el.classList.toggle('active', show);
+    }
 
-    // ================= محرك البحث (محدث) =================
-    async function performSearch() {
-        const query = document.getElementById('searchInput').value.trim();
-        if (query.length < 3) {
-            showToast("⚠️ يرجى كتابة 3 حروف على الأقل");
+    function downloadDatabase() {
+        if (localDatabase.length === 0) { showToast(t('hadith_db_loading')); return; }
+        showToast(t('hadith_preparing'));
+        // Ã™â€žÃ˜Â§ Ã™â€ Ã™ÂÃ˜ÂµÃ˜Â¯Ã™â€˜Ã˜Â± Ã˜Â§Ã™â€žÃ˜Â­Ã™â€šÃ™â€ž Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â·Ã˜Â¨Ã™â€˜Ã˜Â¹ Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â¤Ã™â€šÃ˜Âª
+        const exportData = localDatabase.map(({ normalized, ...rest }) => rest);
+        const blob = new Blob([JSON.stringify(exportData)], { type: "application/json;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'Zad_AlMuslim_DB.json';
+        document.body.appendChild(a); a.click();
+        setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); showToast(t('hadith_downloaded')); }, 100);
+    }
+
+    // Ã™â€ Ã˜Â³Ã˜Â® Ã™â€¦Ã™Ë†Ã˜Â«Ã™Ë†Ã™â€š Ã™Å Ã˜Â¹Ã™â€¦Ã™â€ž Ã˜Â£Ã™Ë†Ã™â€ Ã™â€žÃ˜Â§Ã™Å Ã™â€  Ã™Ë†Ã˜Â£Ã™Ë†Ã™ÂÃ™â€žÃ˜Â§Ã™Å Ã™â€  (file:// / Capacitor)
+    function copyToClipboard(encodedText) {
+        const text = decodeURIComponent(encodedText);
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => showToast(t('hadith_copied'))).catch(() => fallbackCopy(text));
+        } else {
+            fallbackCopy(text);
+        }
+    }
+    function fallbackCopy(text) {
+        try {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.focus(); ta.select();
+            const ok = document.execCommand('copy');
+            document.body.removeChild(ta);
+            showToast(ok ? t('hadith_copied') : t('hadith_copy_failed'));
+        } catch (e) { showToast(t('hadith_copy_failed')); }
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.querySelector('span').textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // ===================== Ã˜Â§Ã™â€žÃ˜Â­Ã™Æ’Ã™â€¦ Ã˜Â¹Ã™â€žÃ™â€° Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¯Ã™Å Ã˜Â« =====================
+    function getHadithGrade(bookId, grades) {
+        if (bookId === 'bukhari' || bookId === 'muslim') return { text: t('hadith_grade_sahih'), isOk: true };
+        if (!grades || grades.length === 0) return { text: t('hadith_grade_undefined'), isOk: true };
+        const albani = grades.find(g => (g && g.name || '').toLowerCase().includes('albani'));
+        const raw = (((albani ? albani.grade : grades[0].grade) || '') + '').toLowerCase();
+        const isOk = !raw.includes('daif') && !raw.includes("da'if") && !raw.includes('mawdu');
+        let arGrade = raw || t('hadith_grade_undefined');
+        if (raw.includes('sahih')) arGrade = t('hadith_grade_sahih');
+        else if (raw.includes('hasan')) arGrade = t('hadith_grade_hasan');
+        else if (raw.includes('daif') || raw.includes("da'if")) arGrade = t('hadith_grade_daif');
+        else if (raw.includes('mawdu')) arGrade = t('hadith_grade_mawdu');
+        return { text: arGrade, isOk };
+    }
+
+    // ===================== Ã˜Â§Ã™â€žÃ˜Â­Ã˜Â¯Ã™Å Ã˜Â« Ã˜Â§Ã™â€žÃ™â€¦Ã™â€¦Ã™Å Ã˜Â² =====================
+    function buildCardActions(textToCopy, link) {
+        const copyBtn = `<button class="card-action-btn" onclick="copyToClipboard('${textToCopy}')" title="${t('hadith_copy_tooltip')}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        </button>`;
+        const viewBtn = link ? `<a href="${link}" class="card-action-btn" title="${t('hadith_view_tooltip')}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        </a>` : '';
+        return `<div class="card-actions">${copyBtn}${viewBtn}</div>`;
+    }
+
+    async function fetchRandomHadith() {
+        try {
+            const res = await fetch('assets/hadith/rand-hadith.json');
+            if (res.ok) {
+                const data = await res.json();
+                if (Array.isArray(data) && data.length > 0) {
+                    const random = data[Math.floor(Math.random() * data.length)];
+                    const text = random.hadith || random.text || "";
+                    const source = random.source || random.bookName || "";
+                    const grade = random.grade || (random.grades ? getHadithGrade('', random.grades).text : "");
+                    const textToCopy = encodeURIComponent(`${text}\n\n[${source} - ${grade}]`);
+                    document.getElementById('dailyHadithText').innerHTML = `
+                        ${text}
+                        <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;">
+                            <span class="daily-meta">${source}${grade ? ' Ã¢â‚¬Â¢ ' + grade : ''}</span>
+                            ${buildCardActions(textToCopy, null)}
+                        </div>`;
+                    return;
+                }
+            }
+        } catch (e) {
+            console.log(t('hadith_rand_unavailable'));
+        }
+        setDynamicHadith();
+    }
+    function setDynamicHadith() {
+        if (!localDatabase.length) return;
+        const pool = localDatabase.filter(h => h.text.length <= 300 && getHadithGrade(h.bookId, h.grades).isOk);
+        const source = pool.length ? pool : localDatabase;
+        const random = source[Math.floor(Math.random() * source.length)];
+        const gradeInfo = getHadithGrade(random.bookId, random.grades);
+        const sectionText = random.sectionName ? ` (${random.sectionName})` : '';
+        const link = random.sectionNumber ? `hadith-viewer.html?book=${random.bookId}&section=${random.sectionNumber}` : null;
+        const textToCopy = encodeURIComponent(`${random.text}\n\n[${random.bookName}${sectionText} - Ã˜Â±Ã™â€šÃ™â€¦ ${random.number} - ${gradeInfo.text}]`);
+        document.getElementById('dailyHadithText').innerHTML = `
+            ${random.text}
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;">
+                <span class="daily-meta">${random.bookName}${sectionText} Ã¢â‚¬Â¢ ${gradeInfo.text}</span>
+                ${buildCardActions(textToCopy, link)}
+            </div>`;
+    }
+
+    // ===================== Ã™â€¦Ã˜Â­Ã˜Â±Ã™â€˜Ã™Æ’ Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â­Ã˜Â« =====================
+    let typingTimer;
+    const searchInput = document.getElementById('searchInput');
+
+    searchInput.addEventListener('input', () => {
+        document.getElementById('clearInputBtn').style.display = searchInput.value ? 'flex' : 'none';
+        clearTimeout(typingTimer);
+        if (searchInput.value.trim().length >= 3) typingTimer = setTimeout(initiateSearch, 450);
+    });
+    searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            searchInput.blur();
+            const query = searchInput.value.trim();
+            if (query.length >= 3) { saveToHistory(query); initiateSearch(); }
+        }
+    });
+
+    function clearSearchField() {
+        searchInput.value = '';
+        document.getElementById('clearInputBtn').style.display = 'none';
+        document.getElementById('resultsContainer').innerHTML = '';
+        document.getElementById('resultsSummary').style.display = 'none';
+        document.getElementById('scrollTrigger').style.display = 'none';
+        searchInput.focus();
+    }
+
+    function initiateSearch() {
+        const query = searchInput.value.trim();
+        if (query.length < 3) return;
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('resultsContainer').innerHTML = '';
+        document.getElementById('resultsSummary').style.display = 'none';
+        setTimeout(() => performSearchEngine(query), 30);
+    }
+
+    function performSearchEngine(query) {
+        const isStrict = document.getElementById('strictTashkeel').checked;
+        const normQuery = normalizeText(query);
+        const selected = new Set(Array.from(document.querySelectorAll('#booksFilter input:checked')).map(cb => cb.value));
+
+        // <img src="img/SVG/zap.svg" class="setting-icon" style="width:1em;height:1em;vertical-align:-0.125em;"> Ã™Å Ã˜Â¹Ã˜ÂªÃ™â€¦Ã˜Â¯ Ã˜Â¹Ã™â€žÃ™â€° Ã˜Â§Ã™â€žÃ˜Â­Ã™â€šÃ™â€ž Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â·Ã˜Â¨Ã™â€˜Ã˜Â¹ Ã˜Â§Ã™â€žÃ™â€¦Ã˜Â­Ã˜Â³Ã™Ë†Ã˜Â¨ Ã™â€¦Ã˜Â³Ã˜Â¨Ã™â€šÃ˜Â§Ã™â€¹: Ã™Å Ã™ÂÃ˜ÂµÃ™â€žÃ˜Â­ Ã˜Â¹Ã˜Â·Ã™â€ž Ã˜Â§Ã™â€žÃ˜Â¨Ã˜Â­Ã˜Â« Ã˜Â§Ã™â€žÃ˜Â§Ã™ÂÃ˜ÂªÃ˜Â±Ã˜Â§Ã˜Â¶Ã™Å  Ã™Ë†Ã™Å Ã˜Â³Ã˜Â±Ã™â€˜Ã˜Â¹Ã™â€¡
+        currentSearchResults = localDatabase.filter(item => {
+            if (!selected.has(item.bookId)) return false;
+            return isStrict ? item.text.includes(query) : item.normalized.includes(normQuery);
+        });
+
+        document.getElementById('loader').style.display = 'none';
+        currentRenderIndex = 0;
+
+        const container = document.getElementById('resultsContainer');
+        if (currentSearchResults.length === 0) {
+            container.innerHTML = `<div class="empty-state"><span class="icn"><img src="img/SVG/search.svg" class="action-icon" style="width:1em;height:1em;vertical-align:-0.125em;"></span>${t('hadith_no_results')}</div>`;
+            document.getElementById('scrollTrigger').style.display = 'none';
             return;
         }
 
-        saveToHistory(query);
-        const resultsContainer = document.getElementById('resultsContainer');
-        const loader = document.getElementById('loader');
-        const emptyState = document.getElementById('emptyState');
+        let okCount = 0, warnCount = 0;
+        currentSearchResults.forEach(h => getHadithGrade(h.bookId, h.grades).isOk ? okCount++ : warnCount++);
+        const summary = document.getElementById('resultsSummary');
+        summary.style.display = 'block';
+        summary.innerHTML = t('hadith_results_summary', { count: currentSearchResults.length.toLocaleString('ar-EG') }) + '<br>' +
+            '<span class="summary-ok">' + t('hadith_summary_ok', { n: okCount.toLocaleString('ar-EG') }) + '</span> Ã¢â‚¬Â¢ <span class="summary-warn">' + t('hadith_summary_warn', { n: warnCount.toLocaleString('ar-EG') }) + '</span>';
 
-        if (emptyState) emptyState.style.display = 'none';
-        resultsContainer.innerHTML = '';
-        loader.style.display = 'block';
+        renderNextChunk();
+        setupIntersectionObserver();
+    }
 
-        try {
-            // الاتصال بموقع الدرر السنية مباشرة باستخدام AllOrigins Proxy لتخطي حماية CORS
-            const dorarUrl = `https://dorar.net/dorar_api.json?skey=${encodeURIComponent(query)}`;
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(dorarUrl)}`;
-            
-            const response = await fetch(proxyUrl);
-            const proxyData = await response.json();
-            
-            // استخراج البيانات القادمة من الدرر السنية
-            const data = JSON.parse(proxyData.contents);
+    function renderNextChunk() {
+        const container = document.getElementById('resultsContainer');
+        const fragment = document.createDocumentFragment();
+        const end = Math.min(currentRenderIndex + CHUNK_SIZE, currentSearchResults.length);
+        const query = searchInput.value.trim();
+        const highlightRegex = document.getElementById('strictTashkeel').checked
+            ? new RegExp('(' + escapeRegex(query) + ')', 'g')
+            : buildRegex(query);
 
-            loader.style.display = 'none';
+        for (let i = currentRenderIndex; i < end; i++) {
+            const hadith = currentSearchResults[i];
+            const gradeInfo = getHadithGrade(hadith.bookId, hadith.grades);
+            const badgeClass = gradeInfo.isOk ? "badge-ok" : "badge-warn";
+            let highlightedText = hadith.text;
+            try { highlightedText = hadith.text.replace(highlightRegex, '<span class="search-highlight">$1</span>'); } catch (e) {}
+            const sectionDisplay = hadith.sectionName ? ` (${hadith.sectionName})` : '';
+            const link = hadith.sectionNumber ? `hadith-viewer.html?book=${hadith.bookId}&section=${hadith.sectionNumber}` : null;
+            const textToCopy = encodeURIComponent(`${hadith.text}\n\n${t('hadith_book_prefix')}${hadith.bookName}${sectionDisplay}\n${t('hadith_number_prefix')}${hadith.number}\n${t('hadith_grade_prefix')}${gradeInfo.text}`);
 
-            // التأكد من وجود نتائج صالحة
-            if (!data || !data.ahadith || !data.ahadith.result || data.ahadith.result.includes("لا يوجد نتائج")) {
-                resultsContainer.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">لم نجد نتائج مطابقة، تأكد من الإملاء وحاول مجدداً.</div>';
-                return;
-            }
-
-            // تحويل الـ HTML القادم من الدرر السنية إلى عناصر قابلة للقراءة
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(data.ahadith.result, 'text/html');
-            
-            const hadithDivs = doc.querySelectorAll('.hadith');
-            const infoDivs = doc.querySelectorAll('.hadith-info');
-
-            for (let i = 0; i < hadithDivs.length; i++) {
-                // إزالة الترقيم من بداية الحديث 
-                let cleanHadith = hadithDivs[i].textContent.trim().replace(/^\d+\s*-\s*/, '');
-                let rawInfo = infoDivs[i] ? infoDivs[i].textContent.trim() : '';
-                
-                // تحديد حالة الحديث لإعطائه اللون المناسب
-                let badgeClass = "badge-ok";
-                let statusText = "مقبول / صحيح";
-                
-                if (rawInfo.includes('ضعيف') || rawInfo.includes('موضوع') || rawInfo.includes('باطل') || rawInfo.includes('منكر')) {
-                    badgeClass = "badge-warn";
-                    statusText = "ضعيف أو موضوع";
-                }
-
-                // تنسيق معلومات الحديث لتظهر بشكل مرتب
-                const formattedInfo = rawInfo.replace(/\|/g, '<br><span style="color:var(--primary);">•</span> ');
-
-                // تجهيز نص آمن تماماً للنسخ
-                const textToCopy = encodeURIComponent(`${cleanHadith}\n\nالمصادر:\n${rawInfo}`);
-
-                const card = document.createElement('div');
-                card.className = 'hadith-item';
-                
-                card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                        <span class="${badgeClass}">${statusText}</span>
-                        <div class="icon-btn" style="width:35px; height:35px; background:rgba(255,255,255,0.05); border:none; cursor:pointer;" onclick="copyToClipboard('${textToCopy}')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                        </div>
-                    </div>
-                    <div class="hadith-text">${cleanHadith}</div>
-                    <div class="hadith-meta">
-                        <span style="color:var(--primary);">•</span> ${formattedInfo}
-                    </div>
-                `;
-                resultsContainer.appendChild(card);
-            }
-        } catch (error) {
-            loader.style.display = 'none';
-            resultsContainer.innerHTML = '<div style="text-align:center; padding:30px; color:#f87171;">حدث خطأ في الاتصال. يرجى التأكد من الإنترنت أو المحاولة لاحقاً.</div>';
-            console.error("Fetch Error: ", error);
+            const card = document.createElement('div');
+            card.className = 'hadith-item' + (gradeInfo.isOk ? '' : ' warn');
+            card.style.animationDelay = ((i - currentRenderIndex) * 0.04) + 's';
+            card.innerHTML = `
+                <div class="hadith-head">
+                    <span class="${badgeClass}">${gradeInfo.text}</span>
+                    ${buildCardActions(textToCopy, link)}
+                </div>
+                <div class="hadith-text">${highlightedText}</div>
+                <div class="hadith-meta"><b>${t('hadith_book_prefix')}</b> ${hadith.bookName}${sectionDisplay} &nbsp;|&nbsp; <b>${t('hadith_number_prefix')}</b> ${hadith.number}</div>`;
+            fragment.appendChild(card);
         }
+        container.appendChild(fragment);
+        currentRenderIndex = end;
+        document.getElementById('scrollTrigger').style.display = (currentRenderIndex < currentSearchResults.length) ? 'block' : 'none';
     }
 
-    // ================= دوال مساعدة للنسخ والتنبيهات =================
-    function copyToClipboard(encodedText) {
-        try {
-            const decodedText = decodeURIComponent(encodedText);
-            navigator.clipboard.writeText(decodedText).then(() => {
-                showToast("✅ تم نسخ الحديث والمصدر بنجاح");
-            });
-        } catch (e) {
-            showToast("❌ فشل النسخ");
-        }
+    function setupIntersectionObserver() {
+        if (scrollObserver) scrollObserver.disconnect();
+        const trigger = document.getElementById('scrollTrigger');
+        scrollObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && currentRenderIndex < currentSearchResults.length) renderNextChunk();
+        }, { rootMargin: '200px' });
+        scrollObserver.observe(trigger);
     }
 
-    let toastTimeout;
-    function showToast(msg) {
-        const toast = document.getElementById('toast');
-        toast.querySelector('span').innerText = msg;
-        toast.classList.add('show');
-        clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
-    }
-
-    window.onload = () => {
-        renderHistory();
-    };
+    window.onload = loadBooks;
 </script>
+<script>if (window.I18n) I18n.init();</script>
+  <script src="js/svg-injector.js"></script>
 </body>
 </html>

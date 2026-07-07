@@ -1,0 +1,105 @@
+{
+  "id": "/Tasbee7/",
+  "name": "Ø²Ø§Ø¯ Ø§Ù„Ù…Ø³Ù„Ù… - Zad Al-Muslim",
+  "short_name": "Ø²Ø§Ø¯ Ø§Ù„Ù…Ø³Ù„Ù…",
+  "description": "Ø§Ù„Ù‚Ø±Ø¢Ù† Ø§Ù„ÙƒØ±ÙŠÙ…ØŒ Ø§Ù„Ø£Ø°ÙƒØ§Ø±ØŒ Ø§Ù„Ù…Ø³Ø¨Ø­Ø©ØŒ ÙˆØ¥Ø°Ø§Ø¹Ø© Ø§Ù„Ù‚Ø±Ø¢Ù† Ø§Ù„ÙƒØ±ÙŠÙ…",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#020617",
+  "theme_color": "#10b981",
+
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon_1024.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "poster.webp",
+      "sizes": "768x1376",
+      "type": "image/webp",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "poster-wide.webp",
+      "sizes": "1280x800",
+      "type": "image/webp",
+      "form_factor": "wide"
+    }
+  ],
+
+  "categories": ["education", "lifestyle", "religion"],
+
+  "shortcuts": [
+    {
+      "name": "Ø§Ù„Ù‚Ø±Ø¢Ù† Ø§Ù„ÙƒØ±ÙŠÙ…",
+      "url": "quran.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Ø§Ù„Ø§Ø³ØªÙ…Ø§Ø¹ Ù„Ù„Ù‚Ø±Ø¢Ù†",
+      "url": "audio.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Ø¥Ø°Ø§Ø¹Ø© Ø§Ù„Ù‚Ø±Ø¢Ù†",
+      "url": "radio.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Ø§Ù„Ø£Ø°ÙƒØ§Ø±",
+      "url": "azkar.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

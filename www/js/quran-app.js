@@ -43,8 +43,9 @@ window.onload = function () {
 
 function renderPage() {
 
-    img.src = `mushaf/${currentPage}.png`;
+    img.src = `mushaf pages/madina-1421/${currentPage.toString().padStart(3, '0')}.webp`;
     localStorage.setItem("lastPage", currentPage);
+    localStorage.setItem("lastPageTime", Date.now());
 
     updateMeta();
     updateBookmarkUI();
@@ -283,7 +284,7 @@ function downloadAllPages() {
     for (let i = 1; i <= 604; i++) {
 
         const preload = new Image();
-        preload.src = `mushaf/${i}.png`;
+        preload.src = `mushaf pages/madina-1421/${i.toString().padStart(3, '0')}.webp`;
 
         preload.onload = () => {
             loaded++;
