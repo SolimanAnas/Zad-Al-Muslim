@@ -22,10 +22,16 @@ android/app/src/main/res/xml/config.xml
 *.aab
 *.keystore
 
+# Large ONNX model (exceeds GitHub's 100 MB limit)
+www/models/fastconformer_ar_ctc_q8.onnx
+
 # OS
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Agent runtime state
+.omo/
 
 # IDE
 .vscode/
